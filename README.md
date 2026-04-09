@@ -10,6 +10,11 @@ A reactive, event-driven trivia quiz backend built for the Picnic Backend Engine
 - **Kafka** (reactor-kafka) — domain event publishing
 - **Maven**
 
+## Diagrams
+
+- [System Diagram](docs/system-diagram.md)
+- [Sequence Diagram](docs/sequence-diagram.md)
+
 ## Architecture
 
 Layered (N-Tier):

@@ -2,6 +2,7 @@ package com.trivia.filter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -31,14 +32,17 @@ public class TransactionIdWebFilter implements WebFilter {
 
         return chain.filter(exchange)
                 .contextWrite(Context.of(TRANSACTION_ID_KEY, transactionId))
-                .doFirst(() -> log.info("→ {} {} transactionId={}",
-                        exchange.getRequest().getMethod(),
-                        exchange.getRequest().getPath(),
-                        transactionId))
-                .doFinally(signal -> log.info("← {} {} status={} transactionId={}",
-                        exchange.getRequest().getMethod(),
-                        exchange.getRequest().getPath(),
-                        exchange.getResponse().getStatusCode(),
-                        transactionId));
+                .doFirst(() -> {
+                    MDC.put(TRANSACTION_ID_KEY, transactionId);
+                    log.info("Request:: {} {}", exchange.getRequest().getMethod(), exchange.getRequest().getPath());
+                    MDC.remove(TRANSACTION_ID_KEY);
+                })
+                .doFinally(signal -> {
+                    MDC.put(TRANSACTION_ID_KEY, transactionId);
+                    log.info("Response:: {} {} status={}", exchange.getRequest().getMethod(),
+                            exchange.getRequest().getPath(),
+                            exchange.getResponse().getStatusCode());
+                    MDC.remove(TRANSACTION_ID_KEY);
+                });
     }
 }

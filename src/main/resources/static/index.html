@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trivia Game</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .card {
+      background: #1e293b;
+      border-radius: 1rem;
+      padding: 2rem;
+      width: 100%;
+      max-width: 560px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+
+    h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.25rem; }
+    h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: 1.25rem; line-height: 1.4; }
+    p  { color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem; }
+
+    label { display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 0.4rem; }
+
+    input, select {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      border-radius: 0.5rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #e2e8f0;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    input:focus, select:focus { outline: 2px solid #6366f1; border-color: transparent; }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn-primary  { background: #6366f1; color: #fff; }
+    .btn-primary:hover:not(:disabled) { background: #4f46e5; }
+    .btn-secondary { background: #334155; color: #e2e8f0; margin-top: 0.75rem; }
+    .btn-secondary:hover:not(:disabled) { background: #475569; }
+
+    /* options grid */
+    .options { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1.5rem; }
+    .opt {
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      border: 2px solid #334155;
+      background: #0f172a;
+      color: #e2e8f0;
+      font-size: 0.95rem;
+      cursor: pointer;
+      text-align: left;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .opt:hover:not(:disabled) { border-color: #6366f1; background: #1e293b; }
+    .opt:disabled { cursor: not-allowed; }
+    .opt.correct  { border-color: #22c55e; background: #14532d; }
+    .opt.wrong    { border-color: #ef4444; background: #450a0a; }
+
+    /* status bar */
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      color: #94a3b8;
+      margin-bottom: 1rem;
+    }
+    .status-bar span b { color: #e2e8f0; }
+
+    /* countdown */
+    #countdown {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      text-align: right;
+      margin-bottom: 0.5rem;
+      min-height: 1.2em;
+    }
+    #countdown.urgent { color: #ef4444; font-weight: 700; }
+
+    /* feedback */
+    #feedback {
+      min-height: 1.4em;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      text-align: center;
+    }
+    #feedback.correct { color: #22c55e; }
+    #feedback.wrong   { color: #ef4444; }
+
+    /* leaderboard */
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
+    th { text-align: left; padding: 0.4rem 0.6rem; color: #94a3b8; border-bottom: 1px solid #334155; }
+    td { padding: 0.5rem 0.6rem; border-bottom: 1px solid #1e293b; }
+    tr:last-child td { border-bottom: none; }
+
+    .hidden { display: none !important; }
+
+    /* error toast */
+    #error-toast {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #7f1d1d;
+      color: #fca5a5;
+      padding: 0.6rem 1.2rem;
+      border-radius: 0.5rem;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      transition: opacity 0.3s;
+    }
+    #error-toast.hidden { opacity: 0; pointer-events: none; }
+  </style>
+</head>
+<body>
+
+<!-- ── START SCREEN ───────────────────────────────────────────── -->
+<div class="card" id="screen-start">
+  <h1>🎯 Trivia</h1>
+  <p>Answer 10 questions. You have 30 seconds per question.</p>
+
+  <label for="player-name">Your name</label>
+  <input id="player-name" type="text" placeholder="e.g. Alice" maxlength="32" />
+
+  <label for="topic-select">Topic</label>
+  <select id="topic-select">
+    <option value="" disabled selected>Loading topics…</option>
+  </select>
+
+  <button class="btn btn-primary" id="start-btn" disabled>Start Quiz</button>
+</div>
+
+<!-- ── QUESTION SCREEN ────────────────────────────────────────── -->
+<div class="card hidden" id="screen-question">
+  <div class="status-bar">
+    <span>Question <b id="q-number">1</b> of <b id="q-total">10</b></span>
+    <span>Score: <b id="q-score">0</b></span>
+  </div>
+
+  <div id="countdown"></div>
+  <h2 id="question-text"></h2>
+  <div class="options" id="options-grid"></div>
+  <div id="feedback"></div>
+</div>
+
+<!-- ── RESULT SCREEN ──────────────────────────────────────────── -->
+<div class="card hidden" id="screen-result">
+  <h1>Quiz Complete!</h1>
+  <p id="result-summary"></p>
+
+  <h2 style="margin-bottom:0.5rem">Leaderboard — <span id="result-topic"></span></h2>
+  <table>
+    <thead><tr><th>#</th><th>Player</th><th>Score</th></tr></thead>
+    <tbody id="leaderboard-body"></tbody>
+  </table>
+
+  <button class="btn btn-primary" id="play-again-btn" style="margin-top:1.5rem">Play Again</button>
+</div>
+
+<!-- ── ERROR TOAST ────────────────────────────────────────────── -->
+<div id="error-toast" class="hidden"></div>
+
+<script>
+  const API = '/api/v1';
+  const TIMEOUT_SEC = 30;
+
+  // ── state ──────────────────────────────────────────────────────
+  let sessionId      = null;
+  let currentQ       = null;   // { id, text, options }
+  let answered       = false;
+  let countdownTimer = null;
+  let remaining      = TIMEOUT_SEC;
+  let totalQuestions = 10;
+
+  // ── screens ────────────────────────────────────────────────────
+  const screens = {
+    start:    document.getElementById('screen-start'),
+    question: document.getElementById('screen-question'),
+    result:   document.getElementById('screen-result'),
+  };
+
+  function show(name) {
+    Object.values(screens).forEach(s => s.classList.add('hidden'));
+    screens[name].classList.remove('hidden');
+  }
+
+  // ── helpers ────────────────────────────────────────────────────
+  async function apiFetch(path, options = {}) {
+    const res = await fetch(API + path, {
+      headers: { 'Content-Type': 'application/json' },
+      ...options,
+    });
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      throw new Error(body.detail || body.message || `HTTP ${res.status}`);
+    }
+    return res.json();
+  }
+
+  function showError(msg) {
+    const toast = document.getElementById('error-toast');
+    toast.textContent = msg;
+    toast.classList.remove('hidden');
+    setTimeout(() => toast.classList.add('hidden'), 4000);
+  }
+
+  // ── countdown ──────────────────────────────────────────────────
+  function startCountdown() {
+    stopCountdown();
+    remaining = TIMEOUT_SEC;
+    renderCountdown();
+    countdownTimer = setInterval(() => {
+      remaining--;
+      renderCountdown();
+      if (remaining <= 0) {
+        stopCountdown();
+        autoSubmit();
+      }
+    }, 1000);
+  }
+
+  function stopCountdown() {
+    clearInterval(countdownTimer);
+    countdownTimer = null;
+    document.getElementById('countdown').textContent = '';
+    document.getElementById('countdown').classList.remove('urgent');
+  }
+
+  function renderCountdown() {
+    const el = document.getElementById('countdown');
+    el.textContent = `⏱ ${remaining}s remaining`;
+    el.classList.toggle('urgent', remaining <= 5);
+  }
+
+  async function autoSubmit() {
+    if (answered || !currentQ) return;
+    // submit index -1 is not valid; pick index 0 as a forced blank answer
+    // (the server treats any wrong answer the same)
+    await submitAnswer(0, true);
+  }
+
+  // ── topic loading ──────────────────────────────────────────────
+  async function loadTopics() {
+    try {
+      const topics = await apiFetch('/topics');
+      const sel = document.getElementById('topic-select');
+      sel.innerHTML = '<option value="" disabled selected>Pick a topic</option>';
+      topics.forEach(({ topic, questionCount }) => {
+        const opt = document.createElement('option');
+        opt.value = topic;
+        opt.textContent = `${topic[0].toUpperCase() + topic.slice(1)} (${questionCount} questions)`;
+        sel.appendChild(opt);
+      });
+      updateStartBtn();
+    } catch (e) {
+      showError('Could not load topics: ' + e.message);
+    }
+  }
+
+  // ── start quiz ─────────────────────────────────────────────────
+  document.getElementById('start-btn').addEventListener('click', async () => {
+    const playerName = document.getElementById('player-name').value.trim();
+    const topic      = document.getElementById('topic-select').value;
+    if (!playerName || !topic) return;
+
+    const btn = document.getElementById('start-btn');
+    btn.disabled = true;
+    btn.textContent = 'Starting…';
+
+    try {
+      const session = await apiFetch('/quizzes', {
+        method: 'POST',
+        body: JSON.stringify({ playerName, topic }),
+      });
+      sessionId      = session.sessionId;
+      totalQuestions = session.questionsRemaining; // all remaining at start = total
+      renderQuestion(session);
+      show('question');
+    } catch (e) {
+      showError(e.message);
+      btn.disabled = false;
+      btn.textContent = 'Start Quiz';
+    }
+  });
+
+  // ── render question ────────────────────────────────────────────
+  function renderQuestion(session) {
+    answered  = false;
+    currentQ  = session.currentQuestion;
+
+    const answered_count = totalQuestions - session.questionsRemaining;
+    document.getElementById('q-number').textContent  = answered_count + 1;
+    document.getElementById('q-total').textContent   = totalQuestions;
+    document.getElementById('q-score').textContent   = session.score;
+    document.getElementById('question-text').textContent = currentQ.text;
+    document.getElementById('feedback').textContent  = '';
+    document.getElementById('feedback').className    = '';
+
+    const grid = document.getElementById('options-grid');
+    grid.innerHTML = '';
+    currentQ.options.forEach((opt, idx) => {
+      const btn = document.createElement('button');
+      btn.className   = 'opt';
+      btn.textContent = opt;
+      btn.addEventListener('click', () => submitAnswer(idx));
+      grid.appendChild(btn);
+    });
+
+    startCountdown();
+  }
+
+  // ── submit answer ──────────────────────────────────────────────
+  async function submitAnswer(chosenIndex, timedOut = false) {
+    if (answered || !currentQ) return;
+    answered = true;
+    stopCountdown();
+
+    // disable all buttons
+    document.querySelectorAll('.opt').forEach(b => (b.disabled = true));
+
+    try {
+      const result = await apiFetch(`/quizzes/${sessionId}/answers`, {
+        method: 'POST',
+        body: JSON.stringify({ questionId: currentQ.id, chosenIndex }),
+      });
+
+      // highlight correct / wrong
+      const opts = document.querySelectorAll('.opt');
+      opts[chosenIndex].classList.add(result.correct ? 'correct' : 'wrong');
+
+      // feedback line
+      const fb = document.getElementById('feedback');
+      if (timedOut && !result.correct) {
+        fb.textContent = "⏰ Time's up! Moving on…";
+        fb.className   = 'wrong';
+      } else if (result.correct) {
+        fb.textContent = `✓ Correct! +${result.pointsAwarded} pts`;
+        fb.className   = 'correct';
+      } else {
+        fb.textContent = '✗ Wrong answer';
+        fb.className   = 'wrong';
+      }
+
+      document.getElementById('q-score').textContent = result.totalScore;
+
+      if (result.sessionStatus === 'COMPLETED') {
+        setTimeout(() => showResult(result.totalScore), 1200);
+      } else {
+        setTimeout(() => {
+          renderQuestion({
+            currentQuestion:  result.nextQuestion,
+            questionsRemaining: totalQuestions - document.getElementById('q-number').textContent,
+            score: result.totalScore,
+          });
+          // re-derive remaining from q-number
+          const qNum = parseInt(document.getElementById('q-number').textContent, 10);
+          document.getElementById('q-number').textContent = qNum + 1; // will be re-set in next renderQuestion
+        }, 1200);
+      }
+    } catch (e) {
+      showError(e.message);
+      answered = false;
+      document.querySelectorAll('.opt').forEach(b => (b.disabled = false));
+      startCountdown();
+    }
+  }
+
+  // ── show result ────────────────────────────────────────────────
+  async function showResult(finalScore) {
+    show('result');
+
+    const topic = document.getElementById('topic-select').value;
+    document.getElementById('result-summary').textContent =
+      `Nice work, ${document.getElementById('player-name').value.trim()}! Final score: ${finalScore}`;
+    document.getElementById('result-topic').textContent =
+      topic[0].toUpperCase() + topic.slice(1);
+
+    try {
+      const board = await apiFetch(`/leaderboard?topic=${topic}&top=10`);
+      const tbody = document.getElementById('leaderboard-body');
+      tbody.innerHTML = '';
+      board.forEach(({ rank, playerName, score }) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${rank}</td><td>${playerName}</td><td>${score}</td>`;
+        tbody.appendChild(tr);
+      });
+    } catch (e) {
+      document.getElementById('leaderboard-body').innerHTML =
+        '<tr><td colspan="3" style="color:#94a3b8">Could not load leaderboard</td></tr>';
+    }
+  }
+
+  // ── play again ─────────────────────────────────────────────────
+  document.getElementById('play-again-btn').addEventListener('click', () => {
+    sessionId = null;
+    currentQ  = null;
+    document.getElementById('start-btn').textContent = 'Start Quiz';
+    updateStartBtn();
+    show('start');
+  });
+
+  // ── enable start button only when both fields filled ──────────
+  function updateStartBtn() {
+    const name  = document.getElementById('player-name').value.trim();
+    const topic = document.getElementById('topic-select').value;
+    document.getElementById('start-btn').disabled = !(name && topic);
+  }
+
+  document.getElementById('player-name').addEventListener('input', updateStartBtn);
+  document.getElementById('topic-select').addEventListener('change', updateStartBtn);
+
+  // ── boot ───────────────────────────────────────────────────────
+  loadTopics();
+</script>
+</body>
+</html>

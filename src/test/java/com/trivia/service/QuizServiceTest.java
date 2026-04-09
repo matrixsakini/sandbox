@@ -93,7 +93,7 @@ class QuizServiceTest {
         when(sessionRepository.findById("sess-1")).thenReturn(Mono.just(session));
         when(sessionRepository.save(any())).thenAnswer(inv -> Mono.just(inv.getArgument(0)));
         when(kafkaEventPublisher.publish(any())).thenReturn(Mono.empty());
-        when(leaderboardRepository.recordScore(anyString(), anyString(), anyInt())).thenReturn(Mono.just(true));
+        when(leaderboardRepository.recordScore(anyString(), anyString(), anyInt(), any(Instant.class))).thenReturn(Mono.just(true));
 
         StepVerifier.create(quizService.submitAnswer("sess-1", "q1", 1))
                 .assertNext(updated -> {
@@ -117,12 +117,12 @@ class QuizServiceTest {
         when(sessionRepository.findById("sess-1")).thenReturn(Mono.just(session));
         when(sessionRepository.save(any())).thenAnswer(inv -> Mono.just(inv.getArgument(0)));
         when(kafkaEventPublisher.publish(any())).thenReturn(Mono.empty());
-        when(leaderboardRepository.recordScore(anyString(), anyString(), anyInt())).thenReturn(Mono.just(true));
+        when(leaderboardRepository.recordScore(anyString(), anyString(), anyInt(), any(Instant.class))).thenReturn(Mono.just(true));
 
         StepVerifier.create(quizService.submitAnswer("sess-1", "q1", 0))
                 .assertNext(updated -> {
                     assertThat(updated.answers().getFirst().correct()).isFalse();
-                    assertThat(updated.answers().getFirst().points()).isEqualTo(0);
+                    assertThat(updated.answers().getFirst().points()).isZero();
                 })
                 .verifyComplete();
     }

@@ -71,7 +71,8 @@ public class QuizService {
     public Mono<QuizSession> getSession(String sessionId) {
         log.debug("Fetching session: sessionId={}", sessionId);
         return sessionRepository.findById(sessionId)
-                .switchIfEmpty(Mono.error(new SessionNotFoundException(sessionId)));
+                .switchIfEmpty(Mono.error(new SessionNotFoundException(sessionId)))
+                .contextWrite(ctx -> ctx.put("sessionId", sessionId));
     }
 
     public Mono<QuizSession> submitAnswer(String sessionId, String questionId, int chosenIndex) {
@@ -88,7 +89,8 @@ public class QuizService {
                     var updated = session.withAnswer(answer);
                     return sessionRepository.save(updated)
                             .flatMap(saved -> publishAndFinalize(saved, answer));
-                });
+                })
+                .contextWrite(ctx -> ctx.put("sessionId", sessionId));
     }
 
     public Flux<LeaderboardEntry> getLeaderboard(String topic, int top) {
@@ -121,8 +123,9 @@ public class QuizService {
             log.info("Quiz completed: sessionId={}, player={}, score={}/{}",
                     session.sessionId(), session.playerName(), totalScore, maxScore);
 
+            Instant completedAt = Instant.now();
             Mono<Void> recordScore = leaderboardRepository
-                    .recordScore(session.topic(), session.playerName(), totalScore)
+                    .recordScore(session.topic(), session.playerName(), totalScore, completedAt)
                     .then();
             Mono<Void> publishCompleted = kafkaEventPublisher.publish(new QuizCompleted(
                     session.sessionId(), session.playerName(), session.topic(),

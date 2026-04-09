@@ -44,4 +44,4 @@ management:
 
 logging:
   pattern:
-    console: '{"timestamp":"%d{ISO8601}","level":"%p","logger":"%logger{36}","transactionId":"%X{transactionId:-none}","message":"%msg"}%n'
+    console: '{"timestamp":"%d{ISO8601}","level":"%p","logger":"%logger{36}","transactionId":"%X{transactionId:-none}","sessionId":"%X{sessionId:-none}","message":"%msg"}%n'

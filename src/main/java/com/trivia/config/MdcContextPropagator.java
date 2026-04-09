@@ -70,11 +70,15 @@ public class MdcContextPropagator {
 
         private void propagateToMdc() {
             Context ctx = currentContext();
-            if (ctx.hasKey(TransactionIdWebFilter.TRANSACTION_ID_KEY)) {
-                MDC.put(TransactionIdWebFilter.TRANSACTION_ID_KEY,
-                        ctx.get(TransactionIdWebFilter.TRANSACTION_ID_KEY));
+            propagateKey(ctx, TransactionIdWebFilter.TRANSACTION_ID_KEY);
+            propagateKey(ctx, "sessionId");
+        }
+
+        private void propagateKey(Context ctx, String key) {
+            if (ctx.hasKey(key)) {
+                MDC.put(key, ctx.get(key));
             } else {
-                MDC.remove(TransactionIdWebFilter.TRANSACTION_ID_KEY);
+                MDC.remove(key);
             }
         }
     }
