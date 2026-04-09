@@ -1,0 +1,87 @@
+[
+  {
+    "id": "sci-1",
+    "topic": "science",
+    "text": "What planet is closest to the Sun?",
+    "options": ["Venus", "Mercury", "Mars", "Earth"],
+    "correctIndex": 1,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "sci-2",
+    "topic": "science",
+    "text": "What is the chemical symbol for water?",
+    "options": ["Wa", "H2O", "HO2", "O2H"],
+    "correctIndex": 1,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "sci-3",
+    "topic": "science",
+    "text": "What is the powerhouse of the cell?",
+    "options": ["Nucleus", "Ribosome", "Mitochondria", "Golgi apparatus"],
+    "correctIndex": 2,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "sci-4",
+    "topic": "science",
+    "text": "What force keeps planets in orbit around the Sun?",
+    "options": ["Magnetism", "Gravity", "Friction", "Nuclear force"],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sci-5",
+    "topic": "science",
+    "text": "What is the speed of light in a vacuum (approximately)?",
+    "options": ["300,000 km/s", "150,000 km/s", "450,000 km/s", "30,000 km/s"],
+    "correctIndex": 0,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sci-6",
+    "topic": "science",
+    "text": "Which subatomic particle has a negative charge?",
+    "options": ["Proton", "Neutron", "Electron", "Quark"],
+    "correctIndex": 2,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "sci-7",
+    "topic": "science",
+    "text": "What is the atomic number of carbon?",
+    "options": ["4", "6", "8", "12"],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sci-8",
+    "topic": "science",
+    "text": "Which law states that energy cannot be created or destroyed?",
+    "options": [
+      "Newton's first law",
+      "Law of conservation of momentum",
+      "First law of thermodynamics",
+      "Ohm's law"
+    ],
+    "correctIndex": 2,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sci-9",
+    "topic": "science",
+    "text": "What particle mediates the electromagnetic force?",
+    "options": ["Gluon", "W boson", "Photon", "Higgs boson"],
+    "correctIndex": 2,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "sci-10",
+    "topic": "science",
+    "text": "What is Avogadro's number (approximately)?",
+    "options": ["6.022 × 10²³", "3.14 × 10²³", "9.109 × 10²³", "1.602 × 10²³"],
+    "correctIndex": 0,
+    "difficulty": "HARD"
+  }
+]

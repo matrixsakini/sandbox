@@ -1,0 +1,92 @@
+[
+  {
+    "id": "hist-1",
+    "topic": "history",
+    "text": "In which year did World War II end?",
+    "options": ["1943", "1944", "1945", "1946"],
+    "correctIndex": 2,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "hist-2",
+    "topic": "history",
+    "text": "Who was the first President of the United States?",
+    "options": ["John Adams", "Thomas Jefferson", "Benjamin Franklin", "George Washington"],
+    "correctIndex": 3,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "hist-3",
+    "topic": "history",
+    "text": "The French Revolution began in which year?",
+    "options": ["1776", "1789", "1799", "1804"],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "hist-4",
+    "topic": "history",
+    "text": "Which ancient wonder was located in Alexandria?",
+    "options": [
+      "The Colossus of Rhodes",
+      "The Hanging Gardens",
+      "The Great Lighthouse",
+      "The Statue of Zeus"
+    ],
+    "correctIndex": 2,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "hist-5",
+    "topic": "history",
+    "text": "The Battle of Hastings took place in which year?",
+    "options": ["1042", "1066", "1088", "1100"],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "hist-6",
+    "topic": "history",
+    "text": "Who wrote the Declaration of Independence?",
+    "options": ["Benjamin Franklin", "John Adams", "Thomas Jefferson", "James Madison"],
+    "correctIndex": 2,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "hist-7",
+    "topic": "history",
+    "text": "The Ottoman Empire was dissolved in which year?",
+    "options": ["1918", "1920", "1922", "1924"],
+    "correctIndex": 2,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "hist-8",
+    "topic": "history",
+    "text": "Who led the Cuban Revolution?",
+    "options": ["Che Guevara", "Fulgencio Batista", "Fidel Castro", "Raúl Castro"],
+    "correctIndex": 2,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "hist-9",
+    "topic": "history",
+    "text": "The Treaty of Westphalia ended which war?",
+    "options": [
+      "The Thirty Years' War",
+      "The Hundred Years' War",
+      "The Seven Years' War",
+      "The War of Spanish Succession"
+    ],
+    "correctIndex": 0,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "hist-10",
+    "topic": "history",
+    "text": "Which pharaoh built the Great Pyramid at Giza?",
+    "options": ["Ramesses II", "Tutankhamun", "Khufu", "Cleopatra"],
+    "correctIndex": 2,
+    "difficulty": "MEDIUM"
+  }
+]

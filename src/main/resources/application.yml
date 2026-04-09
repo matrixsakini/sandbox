@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: trivia-service
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP:localhost:9092}
+  webflux:
+    problemdetails:
+      enabled: true
+
+server:
+  port: 8080
+
+trivia:
+  questions-per-quiz: 10
+  answer-timeout-seconds: 30
+  active-session-ttl: 30m
+  completed-session-ttl: 5m
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: lin2
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+
+logging:
+  pattern:
+    console: '{"timestamp":"%d{ISO8601}","level":"%p","logger":"%logger{36}","transactionId":"%X{transactionId:-none}","message":"%msg"}%n'

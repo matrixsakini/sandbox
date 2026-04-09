@@ -1,0 +1,107 @@
+[
+  {
+    "id": "tech-1",
+    "topic": "technology",
+    "text": "What does 'HTTP' stand for?",
+    "options": [
+      "HyperText Transfer Protocol",
+      "HyperText Transmission Protocol",
+      "HighText Transfer Protocol",
+      "HyperText Transport Protocol"
+    ],
+    "correctIndex": 0,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "tech-2",
+    "topic": "technology",
+    "text": "Which company created the Java programming language?",
+    "options": ["Microsoft", "Apple", "Sun Microsystems", "IBM"],
+    "correctIndex": 2,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "tech-3",
+    "topic": "technology",
+    "text": "What does 'CPU' stand for?",
+    "options": [
+      "Central Processing Unit",
+      "Computer Processing Unit",
+      "Central Program Unit",
+      "Core Processing Unit"
+    ],
+    "correctIndex": 0,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "tech-4",
+    "topic": "technology",
+    "text": "Which data structure uses LIFO ordering?",
+    "options": ["Queue", "Stack", "Deque", "Priority Queue"],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "tech-5",
+    "topic": "technology",
+    "text": "What is the time complexity of binary search?",
+    "options": ["O(n)", "O(n²)", "O(log n)", "O(1)"],
+    "correctIndex": 2,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "tech-6",
+    "topic": "technology",
+    "text": "Which protocol is used to send email?",
+    "options": ["FTP", "SMTP", "HTTP", "SSH"],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "tech-7",
+    "topic": "technology",
+    "text": "What is the CAP theorem about?",
+    "options": [
+      "CPU, Arithmetic, and Processes",
+      "Consistency, Availability, and Partition tolerance",
+      "Caching, Algorithms, and Parallelism",
+      "Concurrency, Atomicity, and Persistence"
+    ],
+    "correctIndex": 1,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "tech-8",
+    "topic": "technology",
+    "text": "Which sorting algorithm has the best average-case time complexity?",
+    "options": ["Bubble sort", "Insertion sort", "Merge sort", "Quick sort"],
+    "correctIndex": 3,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "tech-9",
+    "topic": "technology",
+    "text": "What does ACID stand for in database transactions?",
+    "options": [
+      "Atomicity, Consistency, Isolation, Durability",
+      "Availability, Consistency, Integrity, Durability",
+      "Atomicity, Concurrency, Isolation, Distribution",
+      "Accuracy, Consistency, Integrity, Durability"
+    ],
+    "correctIndex": 0,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "tech-10",
+    "topic": "technology",
+    "text": "In reactive programming, what does 'backpressure' refer to?",
+    "options": [
+      "Memory pressure from large objects",
+      "CPU pressure from parallel threads",
+      "A mechanism for a consumer to signal demand to a producer",
+      "Network congestion between services"
+    ],
+    "correctIndex": 2,
+    "difficulty": "HARD"
+  }
+]
