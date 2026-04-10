@@ -3,10 +3,7 @@ spring:
     name: trivia-service
   data:
     redis:
-      host: ${REDIS_HOST:localhost}
-      port: ${REDIS_PORT:6379}
-  kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP:localhost:9092}
+      url: ${REDIS_URL:redis://localhost:6379}
   webflux:
     problemdetails:
       enabled: true
@@ -15,6 +12,7 @@ server:
   port: 8080
 
 trivia:
+  kafka-enabled: ${TRIVIA_KAFKA_ENABLED:false}
   questions-per-quiz: 10
   answer-timeout-seconds: 30
   active-session-ttl: 30m
@@ -31,7 +29,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: lin2
+        include: health,info,prometheus
   endpoint:
     health:
       probes:

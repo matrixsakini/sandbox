@@ -4,7 +4,7 @@ import com.trivia.event.AnswerSubmitted;
 import com.trivia.event.QuizCompleted;
 import com.trivia.event.QuizStarted;
 import com.trivia.exception.SessionNotFoundException;
-import com.trivia.messaging.KafkaEventPublisher;
+import com.trivia.messaging.EventPublisher;
 import com.trivia.model.*;
 import com.trivia.question.QuestionService;
 import com.trivia.repository.LeaderboardRepository;
@@ -28,18 +28,18 @@ public class QuizService {
     private final QuestionService questionService;
     private final SessionRepository sessionRepository;
     private final LeaderboardRepository leaderboardRepository;
-    private final KafkaEventPublisher kafkaEventPublisher;
+    private final EventPublisher eventPublisher;
     private final QuizProperties props;
 
     public QuizService(QuestionService questionService,
                        SessionRepository sessionRepository,
                        LeaderboardRepository leaderboardRepository,
-                       KafkaEventPublisher kafkaEventPublisher,
+                       EventPublisher eventPublisher,
                        QuizProperties props) {
         this.questionService = questionService;
         this.sessionRepository = sessionRepository;
         this.leaderboardRepository = leaderboardRepository;
-        this.kafkaEventPublisher = kafkaEventPublisher;
+        this.eventPublisher = eventPublisher;
         this.props = props;
     }
 
@@ -56,7 +56,7 @@ public class QuizService {
                         Instant.now(),
                         QuizStatus.IN_PROGRESS))
                 .flatMap(sessionRepository::save)
-                .flatMap(session -> kafkaEventPublisher
+                .flatMap(session -> eventPublisher
                         .publish(new QuizStarted(
                                 session.sessionId(),
                                 playerName,
@@ -80,6 +80,11 @@ public class QuizService {
         return sessionRepository.findById(sessionId)
                 .switchIfEmpty(Mono.error(new SessionNotFoundException(sessionId)))
                 .flatMap(session -> {
+                    boolean alreadyAnswered = session.answers().stream()
+                            .anyMatch(a -> a.questionId().equals(questionId));
+                    if (alreadyAnswered) {
+                        return Mono.error(new IllegalArgumentException("Question already answered: " + questionId));
+                    }
                     var question = findQuestion(session, questionId);
                     boolean correct = question.correctIndex() == chosenIndex;
                     int points = correct ? computePoints(question) : 0;
@@ -114,7 +119,7 @@ public class QuizService {
     }
 
     private Mono<QuizSession> publishAndFinalize(QuizSession session, SubmittedAnswer answer) {
-        Mono<Void> publishAnswer = kafkaEventPublisher.publish(new AnswerSubmitted(
+        Mono<Void> publishAnswer = eventPublisher.publish(new AnswerSubmitted(
                 session.sessionId(), answer.questionId(), answer.correct(), answer.points(), Instant.now()));
 
         if (session.status() == QuizStatus.COMPLETED) {
@@ -127,7 +132,7 @@ public class QuizService {
             Mono<Void> recordScore = leaderboardRepository
                     .recordScore(session.topic(), session.playerName(), totalScore, completedAt)
                     .then();
-            Mono<Void> publishCompleted = kafkaEventPublisher.publish(new QuizCompleted(
+            Mono<Void> publishCompleted = eventPublisher.publish(new QuizCompleted(
                     session.sessionId(), session.playerName(), session.topic(),
                     totalScore, maxScore, Instant.now()));
 

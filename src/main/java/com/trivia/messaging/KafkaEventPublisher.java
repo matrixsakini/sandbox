@@ -8,13 +8,15 @@ import com.trivia.event.QuizStarted;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import reactor.kafka.sender.KafkaSender;
 import reactor.kafka.sender.SenderRecord;
 
 @Component
-public class KafkaEventPublisher {
+@ConditionalOnProperty(prefix = "trivia", name = "kafka-enabled", havingValue = "true")
+public class KafkaEventPublisher implements EventPublisher {
 
     private static final Logger log = LoggerFactory.getLogger(KafkaEventPublisher.class);
 
@@ -26,6 +28,7 @@ public class KafkaEventPublisher {
         this.objectMapper = objectMapper;
     }
 
+    @Override
     public Mono<Void> publish(DomainEvent event) {
         return Mono.fromCallable(() -> objectMapper.writeValueAsString(event))
                 .flatMap(json -> kafkaSender.send(Mono.just(

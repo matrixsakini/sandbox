@@ -1,0 +1,18 @@
+[
+  {
+    "id": "e2e-q1",
+    "topic": "e2e",
+    "text": "Which option is correct?",
+    "options": ["Correct answer", "Wrong A", "Wrong B", "Wrong C"],
+    "correctIndex": 0,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "e2e-q2",
+    "topic": "e2e",
+    "text": "Which option is also correct?",
+    "options": ["Correct answer", "Wrong A", "Wrong B", "Wrong C"],
+    "correctIndex": 0,
+    "difficulty": "MEDIUM"
+  }
+]

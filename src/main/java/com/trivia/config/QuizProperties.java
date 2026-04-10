@@ -9,5 +9,6 @@ public record QuizProperties(
         int questionsPerQuiz,
         int answerTimeoutSeconds,
         Duration activeSessionTtl,
-        Duration completedSessionTtl
+        Duration completedSessionTtl,
+        boolean kafkaEnabled
 ) {}

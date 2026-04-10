@@ -3,7 +3,7 @@ package com.trivia.service;
 import com.trivia.config.QuizProperties;
 import com.trivia.event.DomainEvent;
 import com.trivia.event.QuizStarted;
-import com.trivia.messaging.KafkaEventPublisher;
+import com.trivia.messaging.EventPublisher;
 import com.trivia.model.*;
 import com.trivia.question.QuestionService;
 import com.trivia.repository.LeaderboardRepository;
@@ -33,12 +33,12 @@ class QuizServiceTest {
     @Mock QuestionService questionService;
     @Mock SessionRepository sessionRepository;
     @Mock LeaderboardRepository leaderboardRepository;
-    @Mock KafkaEventPublisher kafkaEventPublisher;
+    @Mock EventPublisher kafkaEventPublisher;
 
     QuizService quizService;
 
     QuizProperties props = new QuizProperties(5, 30,
-            Duration.ofMinutes(30), Duration.ofMinutes(5));
+            Duration.ofMinutes(30), Duration.ofMinutes(5), false);
 
     @BeforeEach
     void setUp() {
@@ -104,6 +104,23 @@ class QuizServiceTest {
                     assertThat(updated.totalScore()).isEqualTo(10);
                 })
                 .verifyComplete();
+    }
+
+    @Test
+    void submitAnswer_duplicateQuestion_returnsError() {
+        Question question = new Question("q1", "science", "What is 2+2?",
+                List.of("3", "4", "5", "6"), 1, Difficulty.EASY);
+
+        SubmittedAnswer previous = new SubmittedAnswer("q1", 1, true, 10, Instant.now());
+        QuizSession session = new QuizSession("sess-1", "jane", "science",
+                List.of(question), List.of(previous), Instant.now(), QuizStatus.IN_PROGRESS);
+
+        when(sessionRepository.findById("sess-1")).thenReturn(Mono.just(session));
+
+        StepVerifier.create(quizService.submitAnswer("sess-1", "q1", 1))
+                .expectErrorMatches(e -> e instanceof IllegalArgumentException
+                        && e.getMessage().contains("already answered"))
+                .verify();
     }
 
     @Test
