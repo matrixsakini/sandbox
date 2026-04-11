@@ -1,0 +1,363 @@
+[
+  {
+    "id": "rx-1",
+    "topic": "reactor",
+    "text": "Which Reactor type emits 0 or 1 item?",
+    "options": ["Flux", "Mono", "Observable", "Single"],
+    "correctIndex": 1,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "rx-2",
+    "topic": "reactor",
+    "text": "Which Reactor type emits 0 to N items?",
+    "options": ["Mono", "Single", "Flux", "Publisher"],
+    "correctIndex": 2,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "rx-3",
+    "topic": "reactor",
+    "text": "What happens if no subscriber subscribes to a Flux?",
+    "options": [
+      "It executes immediately and discards results",
+      "It throws an exception",
+      "Nothing — Reactor pipelines are lazy",
+      "It caches results for later"
+    ],
+    "correctIndex": 2,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "rx-4",
+    "topic": "reactor",
+    "text": "Which operator transforms each element of a Flux one-to-one?",
+    "options": ["flatMap", "concatMap", "map", "switchMap"],
+    "correctIndex": 2,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "rx-5",
+    "topic": "reactor",
+    "text": "What is the key difference between flatMap and concatMap?",
+    "options": [
+      "flatMap preserves order; concatMap does not",
+      "concatMap preserves order; flatMap subscribes eagerly and may interleave",
+      "They are identical",
+      "concatMap merges errors; flatMap does not"
+    ],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "rx-6",
+    "topic": "reactor",
+    "text": "Which operator is used to share a single subscription among multiple subscribers?",
+    "options": ["cache()", "publish().refCount()", "share()", "replay()"],
+    "correctIndex": 2,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "rx-7",
+    "topic": "reactor",
+    "text": "What does Mono.defer() do compared to Mono.just()?",
+    "options": [
+      "defer() caches the value; just() does not",
+      "defer() creates a new publisher for each subscriber; just() captures the value eagerly",
+      "They behave identically",
+      "defer() is only for error handling"
+    ],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "rx-8",
+    "topic": "reactor",
+    "text": "Which Reactor operator switches to a fallback publisher on error?",
+    "options": ["onErrorReturn", "onErrorResume", "onErrorMap", "doOnError"],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "rx-9",
+    "topic": "reactor",
+    "text": "What is backpressure in the context of Reactor?",
+    "options": [
+      "A way to buffer all upstream items",
+      "A mechanism for a subscriber to signal how many items it can consume",
+      "A technique for parallel execution",
+      "An error propagation strategy"
+    ],
+    "correctIndex": 1,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "rx-10",
+    "topic": "reactor",
+    "text": "What does the publishOn operator do?",
+    "options": [
+      "Switches the Scheduler for upstream operators",
+      "Switches the Scheduler for downstream operators from that point",
+      "Runs the entire pipeline on a new thread",
+      "Same as subscribeOn but for Mono only"
+    ],
+    "correctIndex": 1,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "rx-11",
+    "topic": "reactor",
+    "text": "What does subscribeOn affect compared to publishOn?",
+    "options": [
+      "subscribeOn affects operators after it; publishOn affects operators before it",
+      "subscribeOn sets the Scheduler for the source subscription and upstream; publishOn switches downstream from its position",
+      "They are interchangeable — both affect the full pipeline",
+      "subscribeOn only works with Mono; publishOn works with both"
+    ],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "rx-12",
+    "topic": "reactor",
+    "text": "What does this code print?\nFlux.just(1, 2, 3)\n  .map(i -> i * 2)\n  .filter(i -> i > 3)\n  .subscribe(System.out::println);",
+    "options": ["2 4 6", "4 6", "6", "Nothing — no terminal operator"],
+    "correctIndex": 1,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "rx-13",
+    "topic": "reactor",
+    "text": "What does this code print?\nMono.just(\"hello\")\n  .map(String::toUpperCase)\n  .subscribe(System.out::println);",
+    "options": ["hello", "HELLO", "Nothing — Mono needs block()", "Compilation error"],
+    "correctIndex": 1,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "rx-14",
+    "topic": "reactor",
+    "text": "What is the output of this code?\nFlux.just(\"a\", \"b\", \"c\")\n  .take(2)\n  .subscribe(System.out::println);",
+    "options": ["a b c", "a b", "b c", "c"],
+    "correctIndex": 1,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "rx-15",
+    "topic": "reactor",
+    "text": "What does this code print?\nFlux.just(1, 2, 3)\n  .flatMap(i -> Flux.just(i, i * 10))\n  .subscribe(System.out::println);",
+    "options": [
+      "1 2 3 10 20 30",
+      "1 10 2 20 3 30 (but order not guaranteed)",
+      "1 10 2 20 3 30 (order guaranteed)",
+      "Compilation error — flatMap expects a Mono"
+    ],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "rx-16",
+    "topic": "reactor",
+    "text": "What does this code print?\nMono.just(42)\n  .flatMap(n -> Mono.empty())\n  .defaultIfEmpty(-1)\n  .subscribe(System.out::println);",
+    "options": ["42", "0", "-1", "Nothing — empty Mono completes silently"],
+    "correctIndex": 2,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "rx-17",
+    "topic": "reactor",
+    "text": "What does this code print?\nFlux.just(1, 2, 3)\n  .doOnNext(i -> System.out.print(\"seen:\"))\n  .map(i -> i + 10)\n  .subscribe(System.out::println);",
+    "options": [
+      "11 12 13",
+      "seen:11 seen:12 seen:13",
+      "seen: seen: seen: 11 12 13",
+      "seen:1 11 seen:2 12 seen:3 13"
+    ],
+    "correctIndex": 3,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "rx-18",
+    "topic": "reactor",
+    "text": "What does this code print?\nMono.error(new RuntimeException(\"oops\"))\n  .onErrorReturn(\"fallback\")\n  .subscribe(System.out::println);",
+    "options": ["oops", "fallback", "Nothing — error is swallowed", "RuntimeException is thrown to caller"],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "rx-19",
+    "topic": "reactor",
+    "text": "What does this code print?\nFlux.just(1, 2, 3)\n  .concatMap(i -> Flux.just(i, i * 10))\n  .subscribe(System.out::println);",
+    "options": [
+      "1 10 2 20 3 30 (order not guaranteed)",
+      "1 10 2 20 3 30 (order guaranteed)",
+      "1 2 3 10 20 30",
+      "10 20 30 1 2 3"
+    ],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "rx-20",
+    "topic": "reactor",
+    "text": "What does this code print?\nFlux.range(1, 5)\n  .filter(i -> i % 2 == 0)\n  .reduce(0, Integer::sum)\n  .subscribe(System.out::println);",
+    "options": ["6", "9", "15", "2 4"],
+    "correctIndex": 0,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "rx-21",
+    "topic": "reactor",
+    "text": "In WebFlux, what does returning Mono<Void> from a @PostMapping method indicate?",
+    "options": [
+      "The response body is null",
+      "The endpoint completes with no response body (e.g., 204 No Content)",
+      "WebFlux will throw a MissingResponseBodyException",
+      "The request is processed asynchronously with a callback"
+    ],
+    "correctIndex": 1,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "rx-22",
+    "topic": "reactor",
+    "text": "What is the role of WebFilter in Spring WebFlux?",
+    "options": [
+      "It replaces @ExceptionHandler for reactive error handling",
+      "It intercepts and processes requests and responses in the reactive pipeline before reaching the handler",
+      "It is identical to a servlet Filter but runs on a thread pool",
+      "It only applies to WebSocket connections"
+    ],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "rx-23",
+    "topic": "reactor",
+    "text": "How does Spring WebFlux handle a Flux<ServerSentEvent> returned from a controller?",
+    "options": [
+      "It collects all events and sends them as a JSON array",
+      "It streams each event to the client as Server-Sent Events over a long-lived HTTP connection",
+      "It throws an error — Flux cannot be returned from controllers",
+      "It blocks until the Flux completes, then responds"
+    ],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "rx-24",
+    "topic": "reactor",
+    "text": "What does this WebFlux handler return to the client?\n@GetMapping(\"/items\")\nFlux<String> items() {\n  return Flux.just(\"a\",\"b\",\"c\");\n}",
+    "options": [
+      "Streams \"a\", \"b\", \"c\" as SSE",
+      "Returns JSON array [\"a\",\"b\",\"c\"] when Flux completes",
+      "Blocks and returns only the first element",
+      "Compilation error — controllers must return ResponseEntity"
+    ],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "rx-25",
+    "topic": "reactor",
+    "text": "What is the difference between RouterFunction and @RestController in WebFlux?",
+    "options": [
+      "RouterFunction only works with functional endpoints; @RestController supports both styles",
+      "RouterFunction is the functional programming model using handler functions; @RestController is the annotation model — both are fully supported",
+      "RouterFunction is deprecated in favour of @RestController in WebFlux 3",
+      "RouterFunction requires blocking I/O; @RestController uses reactive I/O"
+    ],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "rx-26",
+    "topic": "reactor",
+    "text": "What does this code print?\nFlux.just(\"x\")\n  .mergeWith(Flux.error(new RuntimeException(\"boom\")))\n  .onErrorReturn(\"err\")\n  .subscribe(System.out::println);",
+    "options": [
+      "x err",
+      "err",
+      "x (error is suppressed)",
+      "boom"
+    ],
+    "correctIndex": 0,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "rx-27",
+    "topic": "reactor",
+    "text": "What does this code print?\nMono.just(\"start\")\n  .doOnSubscribe(s -> System.out.println(\"subscribed\"))\n  .map(v -> v + \"!\")\n  .doOnNext(v -> System.out.println(\"next:\" + v))\n  .subscribe();",
+    "options": [
+      "next:start!",
+      "subscribed  next:start!",
+      "subscribed",
+      "subscribed  next:start"
+    ],
+    "correctIndex": 1,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "rx-28",
+    "topic": "reactor",
+    "text": "What does this code ultimately print?\nFlux.just(1, 2, 3)\n  .switchMap(i -> Flux.just(i * 10))\n  .subscribe(System.out::println);",
+    "options": [
+      "10 20 30",
+      "30 (only the last inner publisher survives)",
+      "10 (only the first survives)",
+      "10 20 30 but order not guaranteed"
+    ],
+    "correctIndex": 0,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "rx-29",
+    "topic": "reactor",
+    "text": "Why is calling block() inside a Reactor pipeline dangerous?",
+    "options": [
+      "block() is not allowed inside a Flux pipeline at compile time",
+      "It can cause a deadlock by blocking a non-blocking scheduler thread that is needed to complete the upstream",
+      "block() always returns null inside a pipeline",
+      "It converts the pipeline to synchronous mode permanently"
+    ],
+    "correctIndex": 1,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "rx-30",
+    "topic": "reactor",
+    "text": "What does Context.of() in Reactor provide that ThreadLocal cannot reliably provide?",
+    "options": [
+      "Faster read access than ThreadLocal for high-throughput pipelines",
+      "A per-subscription immutable key-value store that propagates through the reactive chain without being tied to a specific thread",
+      "A way to share mutable state between concurrent subscribers",
+      "Automatic cleanup of resources when the pipeline completes"
+    ],
+    "correctIndex": 1,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "rx-31",
+    "topic": "reactor",
+    "text": "What does this code print?\nFlux.just(1, 2, 3)\n  .map(i -> { if (i == 2) throw new RuntimeException(); return i; })\n  .onErrorContinue((e, v) -> System.out.println(\"skip:\" + v))\n  .subscribe(System.out::println);",
+    "options": [
+      "1 3",
+      "1 skip:2 3",
+      "skip:2 then error terminates the flux",
+      "1 2 3 (exception is swallowed silently)"
+    ],
+    "correctIndex": 1,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "rx-32",
+    "topic": "reactor",
+    "text": "In Spring WebFlux, what happens if a @ExceptionHandler method returns Mono<ResponseEntity<?>>?",
+    "options": [
+      "It causes an error — exception handlers must be synchronous",
+      "WebFlux subscribes to it and sends the response when the Mono completes, fully non-blocking",
+      "It is executed on a dedicated error-handling thread pool",
+      "The Mono is blocked immediately to extract the ResponseEntity"
+    ],
+    "correctIndex": 1,
+    "difficulty": "HARD"
+  }
+]

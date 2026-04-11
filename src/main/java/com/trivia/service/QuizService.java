@@ -15,6 +15,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
+
+import java.time.Duration;
 
 import java.time.Instant;
 import java.util.List;
@@ -71,6 +74,7 @@ public class QuizService {
     public Mono<QuizSession> getSession(String sessionId) {
         log.debug("Fetching session: sessionId={}", sessionId);
         return sessionRepository.findById(sessionId)
+                .retryWhen(Retry.backoff(2, Duration.ofMillis(50)).maxBackoff(Duration.ofMillis(200)))
                 .switchIfEmpty(Mono.error(new SessionNotFoundException(sessionId)))
                 .contextWrite(ctx -> ctx.put("sessionId", sessionId));
     }
@@ -78,6 +82,7 @@ public class QuizService {
     public Mono<QuizSession> submitAnswer(String sessionId, String questionId, int chosenIndex) {
         log.info("Submitting answer: sessionId={}, questionId={}, chosenIndex={}", sessionId, questionId, chosenIndex);
         return sessionRepository.findById(sessionId)
+                .retryWhen(Retry.backoff(2, Duration.ofMillis(50)).maxBackoff(Duration.ofMillis(200)))
                 .switchIfEmpty(Mono.error(new SessionNotFoundException(sessionId)))
                 .flatMap(session -> {
                     boolean alreadyAnswered = session.answers().stream()

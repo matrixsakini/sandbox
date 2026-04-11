@@ -1,0 +1,230 @@
+[
+  {
+    "id": "dp-1",
+    "topic": "design-patterns",
+    "text": "Which pattern ensures a class has only one instance?",
+    "options": ["Factory", "Prototype", "Singleton", "Builder"],
+    "correctIndex": 2,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "dp-2",
+    "topic": "design-patterns",
+    "text": "The Observer pattern is primarily used for?",
+    "options": [
+      "Creating objects without specifying their class",
+      "One-to-many event notification between objects",
+      "Wrapping an object to add behaviour",
+      "Defining a family of algorithms"
+    ],
+    "correctIndex": 1,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "dp-3",
+    "topic": "design-patterns",
+    "text": "Which pattern separates the construction of a complex object from its representation?",
+    "options": ["Abstract Factory", "Prototype", "Builder", "Facade"],
+    "correctIndex": 2,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "dp-4",
+    "topic": "design-patterns",
+    "text": "The Strategy pattern belongs to which GoF category?",
+    "options": ["Creational", "Structural", "Behavioural", "Concurrency"],
+    "correctIndex": 2,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "dp-5",
+    "topic": "design-patterns",
+    "text": "Which pattern provides a unified interface to a set of interfaces in a subsystem?",
+    "options": ["Adapter", "Facade", "Proxy", "Bridge"],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "dp-6",
+    "topic": "design-patterns",
+    "text": "What is the key difference between Decorator and Proxy?",
+    "options": [
+      "Decorator adds behaviour; Proxy controls access",
+      "Proxy adds behaviour; Decorator controls access",
+      "They are identical patterns with different names",
+      "Decorator is structural; Proxy is creational"
+    ],
+    "correctIndex": 0,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "dp-7",
+    "topic": "design-patterns",
+    "text": "In the Template Method pattern, which part is defined in the base class?",
+    "options": [
+      "The concrete steps only",
+      "The algorithm skeleton; subclasses fill in specific steps",
+      "Nothing — all logic lives in subclasses",
+      "The hook methods only"
+    ],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "dp-8",
+    "topic": "design-patterns",
+    "text": "Which pattern is used by Java's Collections.unmodifiableList()?",
+    "options": ["Decorator", "Facade", "Proxy", "Adapter"],
+    "correctIndex": 2,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "dp-9",
+    "topic": "design-patterns",
+    "text": "The Visitor pattern is best suited when?",
+    "options": [
+      "The object structure changes frequently",
+      "You need to add operations to classes without modifying them, and the structure is stable",
+      "You want to decouple sender and receiver",
+      "You need lazy initialisation of expensive objects"
+    ],
+    "correctIndex": 1,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "dp-10",
+    "topic": "design-patterns",
+    "text": "Which pattern does the Hollywood Principle ('don't call us, we'll call you') describe?",
+    "options": ["Observer", "Command", "Template Method", "Chain of Responsibility"],
+    "correctIndex": 2,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "dp-11",
+    "topic": "design-patterns",
+    "text": "What is the intent of the Factory Method pattern?",
+    "options": [
+      "Create a single shared instance of a class",
+      "Define an interface for creating an object, letting subclasses decide which class to instantiate",
+      "Build complex objects step by step",
+      "Provide a family of related objects without specifying concrete classes"
+    ],
+    "correctIndex": 1,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "dp-12",
+    "topic": "design-patterns",
+    "text": "What problem does the Adapter pattern solve?",
+    "options": [
+      "Adding new behaviour to an object at runtime",
+      "Allowing incompatible interfaces to work together",
+      "Controlling access to an object",
+      "Simplifying a complex subsystem behind a single interface"
+    ],
+    "correctIndex": 1,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "dp-13",
+    "topic": "design-patterns",
+    "text": "Which pattern does Java's Iterable / for-each loop implement?",
+    "options": ["Composite", "Visitor", "Iterator", "Chain of Responsibility"],
+    "correctIndex": 2,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "dp-14",
+    "topic": "design-patterns",
+    "text": "The Command pattern is most useful when you need to?",
+    "options": [
+      "Notify multiple objects when state changes",
+      "Encapsulate a request as an object to support undo, queuing, or logging",
+      "Reduce the number of objects by sharing common state",
+      "Define the skeleton of an algorithm in a base class"
+    ],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "dp-15",
+    "topic": "design-patterns",
+    "text": "What is the key difference between Factory Method and Abstract Factory?",
+    "options": [
+      "Factory Method uses inheritance to create one product; Abstract Factory uses composition to create families of related products",
+      "Abstract Factory creates a single product; Factory Method creates families of products",
+      "Factory Method is a class pattern; Abstract Factory is an object pattern — they solve the same problem",
+      "Abstract Factory always uses a static method; Factory Method does not"
+    ],
+    "correctIndex": 0,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "dp-16",
+    "topic": "design-patterns",
+    "text": "Which pattern is used by servlet filter chains and Spring Security's filter pipeline?",
+    "options": ["Decorator", "Observer", "Chain of Responsibility", "Command"],
+    "correctIndex": 2,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "dp-17",
+    "topic": "design-patterns",
+    "text": "The Composite pattern is best used when?",
+    "options": [
+      "You need to add behaviour to individual objects without modifying their class",
+      "You need to treat individual objects and compositions of objects uniformly through a tree structure",
+      "You need a single point of access to a subsystem",
+      "You need to pass a request along a chain of handlers"
+    ],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "dp-18",
+    "topic": "design-patterns",
+    "text": "The State pattern is primarily used to?",
+    "options": [
+      "Cache and restore an object's internal state",
+      "Allow an object to alter its behaviour when its internal state changes, appearing to change its class",
+      "Separate the algorithm from the object that uses it",
+      "Notify dependents of state changes"
+    ],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "dp-19",
+    "topic": "design-patterns",
+    "text": "What is the key difference between Adapter and Bridge?",
+    "options": [
+      "Adapter is designed upfront to decouple abstraction from implementation; Bridge retrofits two incompatible interfaces",
+      "Bridge is designed upfront to decouple abstraction from implementation; Adapter retrofits two incompatible interfaces",
+      "They are the same pattern — Bridge is the GoF name, Adapter is the common name",
+      "Adapter works with classes; Bridge works with objects only"
+    ],
+    "correctIndex": 1,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "dp-20",
+    "topic": "design-patterns",
+    "text": "java.lang.Integer.valueOf(127) returns the same object on repeated calls, but Integer.valueOf(1000) may not. Which pattern explains this?",
+    "options": ["Singleton", "Prototype", "Flyweight", "Proxy"],
+    "correctIndex": 2,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "dp-21",
+    "topic": "design-patterns",
+    "text": "Spring's ApplicationContext creates and wires beans on your behalf. Which pattern best describes this?",
+    "options": [
+      "Singleton — all beans are singletons by default",
+      "Factory Method — the container uses factory methods to instantiate beans",
+      "Service Locator — callers look up dependencies from a registry",
+      "Dependency Injection via a Factory — the container acts as a Factory that resolves and injects dependencies"
+    ],
+    "correctIndex": 3,
+    "difficulty": "HARD"
+  }
+]

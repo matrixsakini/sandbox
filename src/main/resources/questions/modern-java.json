@@ -1,0 +1,347 @@
+[
+  {
+    "id": "mj-1",
+    "topic": "modern-java",
+    "text": "Which version of Java introduced records?",
+    "options": ["Java 11", "Java 14", "Java 16", "Java 17"],
+    "correctIndex": 2,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "mj-2",
+    "topic": "modern-java",
+    "text": "What keyword is used to declare a sealed class?",
+    "options": ["final", "sealed", "closed", "restricted"],
+    "correctIndex": 1,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "mj-3",
+    "topic": "modern-java",
+    "text": "Which of these is a valid pattern matching expression introduced in Java 16?",
+    "options": [
+      "if (obj instanceof String s)",
+      "if (obj is String s)",
+      "if (obj matches String s)",
+      "if (obj as String s)"
+    ],
+    "correctIndex": 0,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "mj-4",
+    "topic": "modern-java",
+    "text": "What does a record automatically generate?",
+    "options": [
+      "Only getters",
+      "Getters, equals, hashCode, and toString",
+      "Getters, setters, equals, and hashCode",
+      "Only equals and hashCode"
+    ],
+    "correctIndex": 1,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "mj-5",
+    "topic": "modern-java",
+    "text": "Which interface does a sealed class use to list permitted subtypes?",
+    "options": ["allows", "permits", "extends", "subtypes"],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "mj-6",
+    "topic": "modern-java",
+    "text": "What Java feature allows exhaustive matching over sealed types in a switch?",
+    "options": ["Enhanced for-loop", "Pattern matching for switch", "Guarded patterns only", "Record deconstruction"],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "mj-7",
+    "topic": "modern-java",
+    "text": "Which of the following is NOT a permitted subtype keyword for sealed types?",
+    "options": ["final", "sealed", "non-sealed", "abstract"],
+    "correctIndex": 3,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "mj-8",
+    "topic": "modern-java",
+    "text": "What is the primary purpose of virtual threads (Project Loom, Java 21)?",
+    "options": [
+      "Replace OS threads entirely",
+      "Enable high-throughput concurrency without blocking OS threads",
+      "Improve garbage collection latency",
+      "Speed up lambda execution"
+    ],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "mj-9",
+    "topic": "modern-java",
+    "text": "Which Java 21 feature allows deconstruction of a record inside a switch case?",
+    "options": [
+      "Pattern matching for instanceof",
+      "Guarded patterns",
+      "Record patterns",
+      "Sealed switch"
+    ],
+    "correctIndex": 2,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "mj-10",
+    "topic": "modern-java",
+    "text": "What constraint does a compact record constructor enforce that a normal constructor does not?",
+    "options": [
+      "It cannot call this()",
+      "It cannot assign fields directly — components are assigned implicitly after the body",
+      "It must call super()",
+      "It cannot validate parameters"
+    ],
+    "correctIndex": 1,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "mj-11",
+    "topic": "modern-java",
+    "text": "Which Java version finalized text blocks (triple-quoted strings)?",
+    "options": ["Java 13", "Java 14", "Java 15", "Java 17"],
+    "correctIndex": 2,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "mj-12",
+    "topic": "modern-java",
+    "text": "Which API creates a new virtual thread for each submitted task in Java 21?",
+    "options": [
+      "Executors.newCachedThreadPool()",
+      "Thread.ofVirtual().executor()",
+      "Executors.newVirtualThreadPerTaskExecutor()",
+      "ForkJoinPool.virtualPool()"
+    ],
+    "correctIndex": 2,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "mj-13",
+    "topic": "modern-java",
+    "text": "What does the yield keyword do inside a switch expression block?",
+    "options": [
+      "Suspends the current thread",
+      "Returns a value from the switch expression",
+      "Breaks out of the switch without a value",
+      "Passes control to the next case"
+    ],
+    "correctIndex": 1,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "mj-14",
+    "topic": "modern-java",
+    "text": "Which interface introduced in Java 21 adds getFirst(), getLast(), and reversed() to the collections hierarchy?",
+    "options": ["SortedCollection", "SequencedCollection", "OrderedCollection", "IndexedCollection"],
+    "correctIndex": 1,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "mj-15",
+    "topic": "modern-java",
+    "text": "What keyword was finalized in Java 22 (JEP 456) to explicitly declare a variable whose value is intentionally unused?",
+    "options": ["void", "null", "_", "unused"],
+    "correctIndex": 2,
+    "difficulty": "EASY"
+  },
+  {
+    "id": "mj-16",
+    "topic": "modern-java",
+    "text": "What is the most common cause of virtual thread pinning to its carrier thread?",
+    "options": [
+      "Calling Thread.sleep()",
+      "Entering a synchronized block or method",
+      "Using a ReentrantLock",
+      "Performing network I/O"
+    ],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "mj-17",
+    "topic": "modern-java",
+    "text": "What is the primary purpose of StructuredTaskScope in Java's structured concurrency API?",
+    "options": [
+      "To replace CompletableFuture with a simpler chaining API",
+      "To enforce that all forked subtasks complete before the scope's owner exits it",
+      "To provide automatic retry logic for failed tasks",
+      "To cap the number of virtual threads in flight"
+    ],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "mj-18",
+    "topic": "modern-java",
+    "text": "When pattern matching for switch covers all permitted subtypes of a sealed interface, what can the compiler guarantee?",
+    "options": [
+      "Runtime type checks are skipped for better performance",
+      "The switch is exhaustive and no default case is required",
+      "Each case must match exactly one concrete subtype",
+      "Guarded patterns are evaluated before unguarded ones"
+    ],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "mj-19",
+    "topic": "modern-java",
+    "text": "Which statement about Java records and inheritance is correct?",
+    "options": [
+      "Records can extend other records but not regular classes",
+      "Records are implicitly final and implicitly extend java.lang.Record, so they cannot extend any other class",
+      "Records can extend abstract classes as long as those classes have no fields",
+      "Records support single inheritance from classes and multiple inheritance from interfaces"
+    ],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "mj-20",
+    "topic": "modern-java",
+    "text": "In pattern matching for switch (Java 21+), what keyword introduces a guard condition on a pattern?",
+    "options": ["if", "guard", "when", "where"],
+    "correctIndex": 2,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "mj-21",
+    "topic": "modern-java",
+    "text": "What does StructuredTaskScope.ShutdownOnFailure do when any forked subtask fails?",
+    "options": [
+      "Retries the failed subtask up to three times before propagating",
+      "Ignores the failure and waits for all remaining tasks to complete",
+      "Shuts down the scope, cancels remaining subtasks, and rethrows the first failure on join()",
+      "Logs the failure and returns a partial result from successful subtasks"
+    ],
+    "correctIndex": 2,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "mj-22",
+    "topic": "modern-java",
+    "text": "Which API finalized in Java 22 (JEP 454) provides a safe alternative to JNI for calling native code and accessing off-heap memory?",
+    "options": [
+      "Native Method Interface 2.0",
+      "Foreign Function & Memory API",
+      "Panama Bridge API",
+      "JVM Native Interop Layer"
+    ],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "mj-23",
+    "topic": "modern-java",
+    "text": "Why are virtual threads unmounted from their carrier thread during blocking I/O?",
+    "options": [
+      "To allow the JIT compiler to optimize the blocking call",
+      "So the carrier thread can run other virtual threads while the I/O completes, maximizing throughput",
+      "To avoid sharing heap memory between the virtual thread and the OS",
+      "Because blocking I/O requires a dedicated OS thread that bypasses the carrier"
+    ],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "mj-24",
+    "topic": "modern-java",
+    "text": "In the Java virtual thread model, what is a carrier thread?",
+    "options": [
+      "A virtual thread that spawns and coordinates other virtual threads",
+      "A platform (OS) thread from the ForkJoinPool that mounts and executes virtual threads",
+      "A thread that propagates context variables to child threads via InheritableThreadLocal",
+      "A lightweight wrapper thread dedicated to I/O operations"
+    ],
+    "correctIndex": 1,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "mj-25",
+    "topic": "modern-java",
+    "text": "Why should ReentrantLock be preferred over synchronized blocks when writing virtual-thread-friendly code?",
+    "options": [
+      "ReentrantLock has lower overhead than synchronized in all cases",
+      "synchronized is deprecated as of Java 21",
+      "synchronized pins the virtual thread to its carrier thread for the duration of the lock, blocking the carrier from running other virtual threads",
+      "ReentrantLock integrates with the virtual thread scheduler to avoid blocking"
+    ],
+    "correctIndex": 2,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "mj-26",
+    "topic": "modern-java",
+    "text": "How does ScopedValue differ from ThreadLocal in the context of structured concurrency?",
+    "options": [
+      "ScopedValue values are mutable and shared between threads; ThreadLocal values are not",
+      "ScopedValue is immutable within a scope and efficiently inherited by child threads without per-thread copying",
+      "ScopedValue persists beyond its binding scope whereas ThreadLocal requires manual removal",
+      "ScopedValue requires explicit removal to prevent memory leaks; ThreadLocal does not"
+    ],
+    "correctIndex": 1,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "mj-27",
+    "topic": "modern-java",
+    "text": "What does the Gatherers API (finalized in Java 24, JEP 485) enable that Collectors cannot?",
+    "options": [
+      "Parallel stream collection with custom merge functions",
+      "Custom stateful intermediate stream operations, not just terminal collection",
+      "Lazy evaluation of entire stream pipelines",
+      "Collecting into concurrent data structures with lock-free semantics"
+    ],
+    "correctIndex": 1,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "mj-28",
+    "topic": "modern-java",
+    "text": "What does record pattern deconstruction in a switch (Java 21+) allow that a simple instanceof pattern does not?",
+    "options": [
+      "Matching record types without requiring an explicit cast afterwards",
+      "Binding multiple record components directly in the pattern, including nested record deconstruction, in a single expression",
+      "Checking whether a record reference is null before matching",
+      "Matching records based on their declaration order without naming components"
+    ],
+    "correctIndex": 1,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "mj-29",
+    "topic": "modern-java",
+    "text": "Which scenario is a poor fit for virtual threads?",
+    "options": [
+      "Handling tens of thousands of concurrent HTTP requests",
+      "Executing blocking JDBC queries against a relational database",
+      "Running CPU-intensive tasks such as image processing or cryptographic computation",
+      "Reading large files from a slow network file system"
+    ],
+    "correctIndex": 2,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "mj-30",
+    "topic": "modern-java",
+    "text": "What happens when null is passed as the selector expression in a pattern matching switch (Java 21+)?",
+    "options": [
+      "It always falls through to the default case",
+      "It matches a case null label if present; otherwise NullPointerException is thrown",
+      "It is automatically treated as matching the first case in the switch",
+      "It causes a compile-time error unless an explicit null check precedes the switch"
+    ],
+    "correctIndex": 1,
+    "difficulty": "HARD"
+  }
+]

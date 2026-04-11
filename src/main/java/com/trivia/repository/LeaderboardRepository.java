@@ -19,11 +19,18 @@ public class LeaderboardRepository {
     }
 
     public Mono<Boolean> recordScore(String topic, String playerName, int score, Instant completedAt) {
-        String timesKey = timesKey(topic);
+        String leaderKey = leaderboardKey(topic);
+        String timesKey  = timesKey(topic);
         return stringRedisTemplate.opsForZSet()
-                .incrementScore(leaderboardKey(topic), playerName, score)
-                .flatMap(newScore -> stringRedisTemplate.<String, String>opsForHash()
-                        .put(timesKey, playerName, completedAt.toString()));
+                .score(leaderKey, playerName)
+                .defaultIfEmpty(Double.NEGATIVE_INFINITY)
+                .flatMap(current -> {
+                    if (score <= current) return Mono.just(false);
+                    return stringRedisTemplate.opsForZSet()
+                            .add(leaderKey, playerName, score)
+                            .flatMap(added -> stringRedisTemplate.<String, String>opsForHash()
+                                    .put(timesKey, playerName, completedAt.toString()));
+                });
     }
 
     public Flux<LeaderboardEntry> topScores(String topic, int limit) {
