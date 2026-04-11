@@ -1,0 +1,277 @@
+[
+  {
+    "id": "sm-1",
+    "topic": "sailor-moon",
+    "text": "What is the small grey kitten Diana's relationship to Luna and Artemis in the anime?",
+    "options": [
+      "She is a stray cat Luna adopts during Sailor Moon R",
+      "She is Luna's sister sent from the future",
+      "She is their future daughter from Crystal Tokyo",
+      "She is an unrelated cat who can also speak"
+    ],
+    "correctIndex": 2,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sm-2",
+    "topic": "sailor-moon",
+    "text": "In the anime-original arc at the start of Sailor Moon R, what are the two alien antagonists named?",
+    "options": ["Rubeus and Esmeraude", "Ail and An", "Sapphire and Demand", "Fiore and Xenian"],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sm-3",
+    "topic": "sailor-moon",
+    "text": "What does Sailor Pluto guard, keeping her isolated from the other Senshi?",
+    "options": ["The Silver Crystal vault", "The Door of Space-Time", "The entrance to Crystal Tokyo", "The Mirror of Nehellenia"],
+    "correctIndex": 1,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sm-4",
+    "topic": "sailor-moon",
+    "text": "What collective name is given to the five powerful warriors serving Professor Tomoe in Sailor Moon S?",
+    "options": ["Amazon Quartet", "DD Girls", "Sailor Animamates", "Witches 5"],
+    "correctIndex": 3,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sm-5",
+    "topic": "sailor-moon",
+    "text": "What is Sailor Moon's main finishing attack in Sailor Moon SuperS?",
+    "options": ["Moon Spiral Heart Attack", "Starlight Honeymoon Therapy Kiss", "Rainbow Moon Heart Ache", "Moon Gorgeous Meditation"],
+    "correctIndex": 3,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sm-6",
+    "topic": "sailor-moon",
+    "text": "What is Sailor Venus's first attack, used when she joins the team in the 1990s anime?",
+    "options": ["Venus Love-Me Chain", "Rolling Heart Vibration", "Venus Wink Chain Sword", "Crescent Beam"],
+    "correctIndex": 3,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sm-7",
+    "topic": "sailor-moon",
+    "text": "In the first season finale at D-Point, what do the inner Senshi do before Sailor Moon reaches Queen Beryl?",
+    "options": [
+      "They use the Silver Crystal together to weaken Beryl",
+      "They retreat and wait for Tuxedo Mask to arrive",
+      "They sacrifice their lives fighting the DD Girls to clear the way for Sailor Moon",
+      "They distract the Dark Kingdom generals while Sailor Moon sneaks past"
+    ],
+    "correctIndex": 2,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sm-8",
+    "topic": "sailor-moon",
+    "text": "In Sailor Moon SuperS, the Amazon Trio searches people's dream mirrors. Who are its three members?",
+    "options": [
+      "VesVes, CereCere, PallaPalla",
+      "Rubeus, Esmeraude, Sapphire",
+      "Tiger's Eye, Hawk's Eye, Fish Eye",
+      "Zirconia, Nehelenia, Helios"
+    ],
+    "correctIndex": 2,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sm-9",
+    "topic": "sailor-moon",
+    "text": "What transformation phrase does Chibiusa use to become Sailor Chibi Moon in the anime?",
+    "options": [
+      "Chibi Moon Prism Power, Make Up!",
+      "Moon Crystal Power, Make Up!",
+      "Moon Prism Power, Make Up!",
+      "Pink Moon Power, Make Up!"
+    ],
+    "correctIndex": 2,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sm-10",
+    "topic": "sailor-moon",
+    "text": "Which of the Sailor Starlights is Seiya Kou's Sailor identity in Sailor Stars?",
+    "options": ["Sailor Star Healer", "Sailor Star Maker", "Sailor Star Fighter", "Sailor Kakyuu"],
+    "correctIndex": 2,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sm-11",
+    "topic": "sailor-moon",
+    "text": "Which Sailor Senshi was already active as Sailor V before the others awakened?",
+    "options": ["Sailor Jupiter", "Sailor Mars", "Sailor Venus", "Sailor Mercury"],
+    "correctIndex": 2,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sm-12",
+    "topic": "sailor-moon",
+    "text": "What is the name of the enemy organisation in Sailor Moon S (season 3)?",
+    "options": ["Dark Kingdom", "Dead Moon Circus", "Black Moon Clan", "Death Busters"],
+    "correctIndex": 3,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sm-13",
+    "topic": "sailor-moon",
+    "text": "Which outer Senshi is frequently seen driving racing cars and a helicopter in the anime?",
+    "options": ["Sailor Neptune", "Sailor Pluto", "Sailor Saturn", "Sailor Uranus"],
+    "correctIndex": 3,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sm-14",
+    "topic": "sailor-moon",
+    "text": "What artefact transforms Sailor Moon into Super Sailor Moon in Sailor Moon S?",
+    "options": ["Silver Crystal", "Silence Glaive", "Golden Crystal", "Holy Grail"],
+    "correctIndex": 3,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sm-15",
+    "topic": "sailor-moon",
+    "text": "Which season first introduced Sailor Uranus and Sailor Neptune?",
+    "options": ["Sailor Moon R", "Sailor Moon SuperS", "Sailor Stars", "Sailor Moon S"],
+    "correctIndex": 3,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sm-16",
+    "topic": "sailor-moon",
+    "text": "Who is the main antagonist of Sailor Moon SuperS (season 4)?",
+    "options": ["Sailor Galaxia", "Mistress 9", "Prince Demand", "Queen Nehellenia"],
+    "correctIndex": 3,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sm-17",
+    "topic": "sailor-moon",
+    "text": "What is the true name of Pegasus, who appears in Sailor Moon SuperS?",
+    "options": ["Elios", "Endymion", "Phobos", "Helios"],
+    "correctIndex": 3,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sm-18",
+    "topic": "sailor-moon",
+    "text": "Of the four Dark Kingdom generals, which was the last defeated in the 1990s anime?",
+    "options": ["Jadeite", "Nephrite", "Zoicite", "Kunzite"],
+    "correctIndex": 3,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sm-19",
+    "topic": "sailor-moon",
+    "text": "What is Rei Hino's role that sets her apart from the other inner Senshi?",
+    "options": [
+      "She is a professional idol singer",
+      "She studies abroad at a music academy",
+      "She works as a nurse at a local hospital",
+      "She is a shrine maiden at Hikawa Shrine"
+    ],
+    "correctIndex": 3,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sm-20",
+    "topic": "sailor-moon",
+    "text": "How many episodes does the original 1990s Sailor Moon anime have across all five seasons?",
+    "options": ["166", "172", "186", "200"],
+    "correctIndex": 3,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sm-21",
+    "topic": "sailor-moon",
+    "text": "Which season of the 1990s anime was never officially dubbed into English?",
+    "options": ["Sailor Moon S", "Sailor Moon SuperS", "Sailor Moon R", "Sailor Stars"],
+    "correctIndex": 3,
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "sm-22",
+    "topic": "sailor-moon",
+    "text": "What is Sailor Saturn's talisman weapon called?",
+    "options": ["Deep Aqua Mirror", "Space Sword", "Garnet Rod", "Silence Glaive"],
+    "correctIndex": 3,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "sm-23",
+    "topic": "sailor-moon",
+    "text": "Who possesses Hotaru Tomoe's body as the true villain in Sailor Moon S?",
+    "options": ["Pharaoh 90", "Kaolinite", "Zirconia", "Mistress 9"],
+    "correctIndex": 3,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "sm-24",
+    "topic": "sailor-moon",
+    "text": "What is the civilian group name of the Sailor Starlights in Sailor Stars?",
+    "options": ["Shadow Galactica", "Kinmoku Trio", "Star Senshi", "The Three Lights"],
+    "correctIndex": 3,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "sm-25",
+    "topic": "sailor-moon",
+    "text": "Who sealed Queen Nehellenia inside a mirror before the events of the anime?",
+    "options": ["Sailor Galaxia", "Sailor Saturn", "Sailor Pluto", "Queen Serenity"],
+    "correctIndex": 3,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "sm-26",
+    "topic": "sailor-moon",
+    "text": "What does Sailor Galaxia steal from her victims in Sailor Stars?",
+    "options": ["Their Silver Crystals", "Their transformation brooches", "Their memories of past lives", "Their true Star Seeds"],
+    "correctIndex": 3,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "sm-27",
+    "topic": "sailor-moon",
+    "text": "What is the name of Princess Kakyuu's home planet in Sailor Stars?",
+    "options": ["Coronis", "Mau", "Galactica", "Kinmoku"],
+    "correctIndex": 3,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "sm-28",
+    "topic": "sailor-moon",
+    "text": "What is Sailor Pluto's talisman weapon?",
+    "options": ["Space Sword", "Silence Glaive", "Deep Aqua Mirror", "Garnet Rod"],
+    "correctIndex": 3,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "sm-29",
+    "topic": "sailor-moon",
+    "text": "What happens when Sailor Saturn lowers her Silence Glaive to the ground in the 1990s anime?",
+    "options": [
+      "It purifies all enemies in the vicinity",
+      "It opens a time gate to the 30th century",
+      "It seals enemies in unbreakable crystal",
+      "It triggers a force that can destroy an entire world"
+    ],
+    "correctIndex": 3,
+    "difficulty": "HARD"
+  },
+  {
+    "id": "sm-30",
+    "topic": "sailor-moon",
+    "text": "In early Sailor Moon R, the Moonlight Knight assists the Senshi. What is his true nature in the anime?",
+    "options": [
+      "Prince Endymion's spirit from the Silver Millennium",
+      "An alien from the Makaiju arc in disguise",
+      "A manifestation of the Silver Crystal's power",
+      "A separate identity born from Mamoru's subconscious memories of being Tuxedo Mask"
+    ],
+    "correctIndex": 3,
+    "difficulty": "HARD"
+  }
+]
