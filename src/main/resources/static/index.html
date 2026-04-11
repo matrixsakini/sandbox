@@ -190,12 +190,13 @@
   const TIMEOUT_SEC = 30;
 
   // ── state ──────────────────────────────────────────────────────
-  let sessionId      = null;
-  let currentQ       = null;   // { id, text, options }
-  let answered       = false;
-  let countdownTimer = null;
-  let remaining      = TIMEOUT_SEC;
-  let totalQuestions = 10;
+  let sessionId        = null;
+  let currentQ         = null;   // { id, text, options }
+  let answered         = false;
+  let countdownTimer   = null;
+  let remaining        = TIMEOUT_SEC;
+  let totalQuestions   = 10;
+  let questionsAnswered = 0;
 
   // ── screens ────────────────────────────────────────────────────
   const screens = {
@@ -313,8 +314,7 @@
     answered  = false;
     currentQ  = session.currentQuestion;
 
-    const answered_count = totalQuestions - session.questionsRemaining;
-    document.getElementById('q-number').textContent  = answered_count + 1;
+    document.getElementById('q-number').textContent  = questionsAnswered + 1;
     document.getElementById('q-total').textContent   = totalQuestions;
     document.getElementById('q-score').textContent   = session.score;
     document.getElementById('question-text').textContent = currentQ.text;
@@ -368,18 +368,16 @@
 
       document.getElementById('q-score').textContent = result.totalScore;
 
+      questionsAnswered++;
+
       if (result.sessionStatus === 'COMPLETED') {
         setTimeout(() => showResult(result.totalScore), 1200);
       } else {
         setTimeout(() => {
           renderQuestion({
-            currentQuestion:  result.nextQuestion,
-            questionsRemaining: totalQuestions - document.getElementById('q-number').textContent,
+            currentQuestion: result.nextQuestion,
             score: result.totalScore,
           });
-          // re-derive remaining from q-number
-          const qNum = parseInt(document.getElementById('q-number').textContent, 10);
-          document.getElementById('q-number').textContent = qNum + 1; // will be re-set in next renderQuestion
         }, 1200);
       }
     } catch (e) {
@@ -417,8 +415,9 @@
 
   // ── play again ─────────────────────────────────────────────────
   document.getElementById('play-again-btn').addEventListener('click', () => {
-    sessionId = null;
-    currentQ  = null;
+    sessionId         = null;
+    currentQ          = null;
+    questionsAnswered = 0;
     document.getElementById('start-btn').textContent = 'Start Quiz';
     updateStartBtn();
     show('start');
