@@ -30,6 +30,10 @@
     startBtn: document.getElementById('start-btn'),
     retryBtn: document.getElementById('retry-btn'),
     muteBtn: document.getElementById('mute-btn'),
+    leaderboardBody: document.getElementById('leaderboard-body'),
+    hsEntry: document.getElementById('hs-entry'),
+    hsName: document.getElementById('hs-name'),
+    hsSave: document.getElementById('hs-save'),
   };
 
   // ---------- Canvas / sizing ----------
@@ -402,6 +406,18 @@
   canvas.addEventListener('pointerup', release);
   canvas.addEventListener('pointercancel', release);
 
+  // Block Chrome/Safari edge swipe-back while slashing (iOS).
+  // touch-action:none does not cover the edge nav gesture; the touch event
+  // itself must be cancelled with a non-passive listener.
+  const EDGE = 32; // px from either side where iOS starts a nav swipe
+  canvas.addEventListener('touchstart', (e) => {
+    const x = e.touches[0].clientX;
+    if (x <= EDGE || x >= window.innerWidth - EDGE) e.preventDefault();
+  }, { passive: false });
+  canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault(); // stop swipe-back once a drag is in progress
+  }, { passive: false });
+
   // ---------- Game flow ----------
   function startGame() {
     Object.assign(S, {
@@ -449,11 +465,69 @@
     ui.statCombo.textContent = S.maxCombo;
     ui.statLight.textContent = Math.round(S.light * 100) + '%';
     ui.statSliced.textContent = S.sliced;
+    setupLeaderboard();
     ui.end.classList.remove('hidden');
+  }
+
+  // ---------- Leaderboard (per-mode high scores, stored locally) ----------
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, (c) => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+    ));
+  }
+
+  function renderLeaderboard(highlightName) {
+    if (!window.Leaderboard || !ui.leaderboardBody) return;
+    const rows = Leaderboard.top(gameMode);
+    ui.leaderboardBody.innerHTML = '';
+    if (rows.length === 0) {
+      const tr = document.createElement('tr');
+      const td = document.createElement('td');
+      td.colSpan = 3;
+      td.className = 'board-empty';
+      td.textContent = I18N.t('emptyBoard');
+      tr.appendChild(td);
+      ui.leaderboardBody.appendChild(tr);
+      return;
+    }
+    const hl = highlightName ? highlightName.toLowerCase() : null;
+    rows.forEach((entry, i) => {
+      const tr = document.createElement('tr');
+      if (hl && entry.name.toLowerCase() === hl) tr.classList.add('you');
+      tr.innerHTML =
+        `<td>${i + 1}</td><td>${escapeHtml(entry.name)}</td><td>${entry.score}</td>`;
+      ui.leaderboardBody.appendChild(tr);
+    });
+  }
+
+  function setupLeaderboard() {
+    if (!window.Leaderboard) return;
+    if (ui.hsEntry) ui.hsEntry.classList.add('hidden');
+    if (ui.hsEntry && Leaderboard.qualifies(gameMode, S.score)) {
+      ui.hsName.value = Leaderboard.lastName();
+      ui.hsEntry.classList.remove('hidden');
+    }
+    renderLeaderboard(null);
+  }
+
+  function saveHighScore() {
+    if (!window.Leaderboard || !ui.hsEntry || ui.hsEntry.classList.contains('hidden')) return;
+    const raw = ui.hsName.value;
+    // Match leaderboard.js's cleanName so we can highlight the saved row.
+    const savedName = raw.trim().slice(0, 24) || I18N.t('anonName');
+    Leaderboard.submit(gameMode, raw, S.score);
+    ui.hsEntry.classList.add('hidden');
+    renderLeaderboard(savedName);
   }
 
   ui.startBtn.addEventListener('click', startGame);
   ui.retryBtn.addEventListener('click', startGame);
+  if (ui.hsSave) ui.hsSave.addEventListener('click', saveHighScore);
+  if (ui.hsName) {
+    ui.hsName.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); saveHighScore(); }
+    });
+  }
 
   // ---------- Update ----------
   function update(dt) {

@@ -28,6 +28,17 @@ and a matching button in `index.html`.
 The selected mode is remembered in `localStorage`. Mode names, like attack
 names, stay untranslated in every language.
 
+## Leaderboards
+
+Each mode keeps its own **Hall of Light** — a top-10 high-score table shown on
+the results screen. When a run earns a place, an arcade-style name entry appears;
+your name and score are saved and your row is highlighted. Only your **best**
+score per name is kept (case-insensitive), sorted highest first.
+
+Boards are stored **locally** in `localStorage` (no backend, no accounts), so
+they're per-browser. Prism and Eternal have separate boards, and your last name
+is remembered to pre-fill the next entry.
+
 ## How to play
 
 - **Swipe** (mouse drag or touch) to slice dark orbs, shards, and wisps.

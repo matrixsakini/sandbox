@@ -9,6 +9,7 @@ html, body {
   color: #fdf3ff;
   -webkit-user-select: none;
   user-select: none;
+  overscroll-behavior: none;
 }
 
 #game {
@@ -318,6 +319,115 @@ button:hover {
   opacity: 1;
   background: linear-gradient(135deg, #a44fd0, #ff7cc0);
   box-shadow: 0 0 14px rgba(255, 124, 192, 0.5);
+}
+
+/* ---------- Leaderboard ---------- */
+
+#board {
+  margin: 6px auto 30px;
+  max-width: 420px;
+  text-align: left;
+}
+
+#board-title {
+  font-size: 14px;
+  font-style: normal;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  text-align: center;
+  color: #ffd98a;
+  text-shadow: 0 0 14px rgba(255, 217, 138, 0.55);
+  margin-bottom: 14px;
+}
+
+#hs-entry {
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+#hs-prompt {
+  font-size: 13px;
+  font-style: italic;
+  color: #e8dcf7;
+  margin-bottom: 10px;
+}
+
+#hs-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+#hs-name {
+  font-family: inherit;
+  font-size: 16px;
+  color: #fff;
+  background: rgba(20, 8, 40, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 40px;
+  padding: 12px 20px;
+  min-width: 0;
+  flex: 1 1 180px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+#hs-name::placeholder { color: rgba(232, 220, 247, 0.45); }
+
+#hs-name:focus {
+  border-color: rgba(255, 124, 192, 0.9);
+  box-shadow: 0 0 16px rgba(255, 124, 192, 0.45);
+}
+
+#hs-save {
+  font-size: 16px;
+  padding: 12px 26px;
+  flex: 0 0 auto;
+}
+
+#leaderboard {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+#leaderboard th {
+  text-align: left;
+  padding: 6px 10px;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #cdb6ee;
+  opacity: 0.7;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+#leaderboard td {
+  padding: 8px 10px;
+  color: #f3e9ff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+#leaderboard th:first-child,
+#leaderboard td:first-child { width: 2.5em; color: #ffd98a; }
+
+#leaderboard th:last-child,
+#leaderboard td:last-child { text-align: right; color: #ffe9b0; font-weight: bold; }
+
+#leaderboard tr:last-child td { border-bottom: none; }
+
+#leaderboard tr.you td {
+  color: #fff;
+  background: linear-gradient(90deg, rgba(164, 79, 208, 0.35), rgba(255, 124, 192, 0.35));
+  text-shadow: 0 0 10px rgba(255, 154, 213, 0.7);
+}
+
+#leaderboard td.board-empty {
+  text-align: center;
+  color: #cdb6ee;
+  font-style: italic;
+  opacity: 0.7;
 }
 
 /* ---------- Mute ---------- */
