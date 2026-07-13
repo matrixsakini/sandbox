@@ -13,9 +13,9 @@
   <div id="hud" class="hidden">
     <div id="light-bar"><div id="light-fill"></div><span id="light-moon">☾</span></div>
     <div id="hud-row">
-      <div id="score-box"><span class="hud-label">score</span><span id="score">0</span></div>
+      <div id="score-box"><span class="hud-label" data-i18n="scoreLabel">score</span><span id="score">0</span></div>
       <div id="timer">30</div>
-      <div id="combo-box"><span class="hud-label">combo</span><span id="combo">—</span></div>
+      <div id="combo-box"><span class="hud-label" data-i18n="comboLabel">combo</span><span id="combo">—</span></div>
     </div>
   </div>
 
@@ -25,14 +25,18 @@
     <div class="panel">
       <div class="crown">☾ ✦ ☽</div>
       <h1>Moon Slash</h1>
-      <p class="tagline">Crystal Tokyo has fallen into shadow.</p>
-      <p class="instructions">
+      <p class="tagline" data-i18n="tagline">Crystal Tokyo has fallen into shadow.</p>
+      <p class="instructions" data-i18n="instructions">
         Swipe to cut through the darkness before it falls.<br>
         Chain slices without a miss — every unbroken combo<br>
         restores light to the kingdom.
       </p>
-      <button id="start-btn">Begin ✦ 30 seconds</button>
-      <p class="hint">mouse or touch · slice fast, miss nothing</p>
+      <button id="start-btn" data-i18n="startBtn">Begin ✦ 30 seconds</button>
+      <p class="hint" data-i18n="hint">mouse or touch · slice fast, miss nothing</p>
+      <div class="lang-switch">
+        <button data-lang="en">EN</button>
+        <button data-lang="tr">TR</button>
+      </div>
     </div>
   </div>
 
@@ -42,17 +46,18 @@
       <h2 id="rank-title"></h2>
       <p id="rank-flavor" class="tagline"></p>
       <div id="stats">
-        <div class="stat"><span class="stat-num" id="stat-score">0</span><span class="stat-label">score</span></div>
-        <div class="stat"><span class="stat-num" id="stat-combo">0</span><span class="stat-label">best combo</span></div>
-        <div class="stat"><span class="stat-num" id="stat-light">0%</span><span class="stat-label">radiance</span></div>
-        <div class="stat"><span class="stat-num" id="stat-sliced">0</span><span class="stat-label">shadows slain</span></div>
+        <div class="stat"><span class="stat-num" id="stat-score">0</span><span class="stat-label" data-i18n="statScore">score</span></div>
+        <div class="stat"><span class="stat-num" id="stat-combo">0</span><span class="stat-label" data-i18n="statCombo">best combo</span></div>
+        <div class="stat"><span class="stat-num" id="stat-light">0%</span><span class="stat-label" data-i18n="statLight">radiance</span></div>
+        <div class="stat"><span class="stat-num" id="stat-sliced">0</span><span class="stat-label" data-i18n="statSliced">shadows slain</span></div>
       </div>
-      <button id="retry-btn">Slice again ☾</button>
+      <button id="retry-btn" data-i18n="retryBtn">Slice again ☾</button>
     </div>
   </div>
 
   <button id="mute-btn" title="toggle sound">♪</button>
 
+  <script src="i18n.js"></script>
   <script src="game.js"></script>
 </body>
 </html>

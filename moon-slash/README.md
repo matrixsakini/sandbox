@@ -8,6 +8,15 @@ that slips past dims it again. Fill the light bar and finish the run as
 
 Pure HTML5 canvas + vanilla JS. No build step, no dependencies, no backend.
 
+## Languages
+
+English and Turkish (Türkçe). Toggle with the **EN | TR** buttons on the
+title screen; the choice is remembered in `localStorage`, and first-time
+visitors with a Turkish browser start in Turkish automatically. Attack
+names ("Moon Tiara Action!", …) and "Neo Queen Serenity" are intentionally
+untranslated. To add a language, add one dictionary entry in `i18n.js`
+and a matching button in `index.html`.
+
 ## How to play
 
 - **Swipe** (mouse drag or touch) to slice dark orbs, shards, and wisps.
