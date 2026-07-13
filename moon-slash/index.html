@@ -61,6 +61,26 @@
         <div class="stat"><span class="stat-num" id="stat-light">0%</span><span class="stat-label" data-i18n="statLight">radiance</span></div>
         <div class="stat"><span class="stat-num" id="stat-sliced">0</span><span class="stat-label" data-i18n="statSliced">shadows slain</span></div>
       </div>
+
+      <div id="board">
+        <h3 id="board-title" data-i18n="leaderboardTitle">Hall of Light</h3>
+        <div id="hs-entry" class="hidden">
+          <p id="hs-prompt" data-i18n="hsPrompt">You restored enough light to be remembered.</p>
+          <div id="hs-row">
+            <input id="hs-name" type="text" maxlength="24" data-i18n-placeholder="hsPlaceholder" placeholder="your name" />
+            <button id="hs-save" data-i18n="hsSave">Enshrine ✦</button>
+          </div>
+        </div>
+        <table id="leaderboard">
+          <thead><tr>
+            <th data-i18n="colRank">#</th>
+            <th data-i18n="colPlayer">Guardian</th>
+            <th data-i18n="colScore">Score</th>
+          </tr></thead>
+          <tbody id="leaderboard-body"></tbody>
+        </table>
+      </div>
+
       <button id="retry-btn" data-i18n="retryBtn">Slice again ☾</button>
     </div>
   </div>
@@ -68,6 +88,7 @@
   <button id="mute-btn" title="toggle sound">♪</button>
 
   <script src="i18n.js"></script>
+  <script src="leaderboard.js"></script>
   <script src="game.js"></script>
 </body>
 </html>

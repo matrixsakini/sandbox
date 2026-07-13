@@ -40,6 +40,15 @@ window.I18N = (() => {
       modeEternalDesc: 'one miss and the light is lost',
       eternalDefeatTitle: 'The Light Falters…',
       eternalDefeatFlavor: 'A single shadow slipped through. Eternal demands perfection.',
+      leaderboardTitle: 'Hall of Light',
+      hsPrompt: 'You restored enough light to be remembered — enter your name.',
+      hsPlaceholder: 'your name',
+      hsSave: 'Enshrine ✦',
+      colRank: '#',
+      colPlayer: 'Guardian',
+      colScore: 'Score',
+      emptyBoard: 'No radiance recorded yet — be the first.',
+      anonName: 'Nameless Guardian',
     },
     tr: {
       tagline: 'Kristal Tokyo karanlığa gömüldü.',
@@ -72,6 +81,15 @@ window.I18N = (() => {
       modeEternalDesc: 'tek kaçırma ve ışık kaybolur',
       eternalDefeatTitle: 'Işık Sönüyor…',
       eternalDefeatFlavor: 'Tek bir gölge kaçtı. Eternal kusursuzluk ister.',
+      leaderboardTitle: 'Işık Salonu',
+      hsPrompt: 'Hatırlanacak kadar ışık geri getirdin — adını gir.',
+      hsPlaceholder: 'adın',
+      hsSave: 'Ölümsüzleştir ✦',
+      colRank: '#',
+      colPlayer: 'Muhafız',
+      colScore: 'Skor',
+      emptyBoard: 'Henüz parlaklık kaydı yok — ilk sen ol.',
+      anonName: 'İsimsiz Muhafız',
     },
   };
 
@@ -94,6 +112,9 @@ window.I18N = (() => {
       const key = el.getAttribute('data-i18n');
       if (HTML_KEYS.has(key)) el.innerHTML = t(key);
       else el.textContent = t(key);
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
+      el.setAttribute('placeholder', t(el.getAttribute('data-i18n-placeholder')));
     });
     document.querySelectorAll('[data-lang]').forEach((btn) => {
       btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
