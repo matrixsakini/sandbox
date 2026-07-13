@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Moon Merge — Forge the Silver Crystal</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
+</head>
+<body>
+  <canvas id="game"></canvas>
+
+  <div id="hud" class="hidden">
+    <div id="light-bar"><div id="light-fill"></div><span id="light-moon">☾</span></div>
+    <div id="hud-row">
+      <div id="score-box"><span class="hud-label" data-i18n="scoreLabel">score</span><span id="score">0</span></div>
+      <div id="chain-box"><span class="hud-label" data-i18n="chainLabel">chain</span><span id="chain">—</span></div>
+    </div>
+  </div>
+
+  <div id="banner" class="hidden"><div id="banner-text"></div><div id="banner-sub"></div></div>
+
+  <div id="menu" class="overlay">
+    <div class="panel">
+      <div class="crown">☾ ✦ ☽</div>
+      <h1>Moon Merge</h1>
+      <p class="tagline" data-i18n="tagline">Forge the Silver Crystal from stardust.</p>
+      <p class="instructions" data-i18n="instructions">
+        Tap an empty cell to place your relic.<br>
+        Three matching relics side by side merge into something greater.<br>
+        Corner the wandering youma to seal them in dark crystal.
+      </p>
+      <button id="start-btn" data-i18n="startBtn">Begin ✦</button>
+      <p class="hint" data-i18n="hint">tap to place · every move matters</p>
+      <div class="lang-switch">
+        <button data-lang="en">EN</button>
+        <button data-lang="tr">TR</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="end" class="overlay hidden">
+    <div class="panel">
+      <div class="crown">✦</div>
+      <h2 id="rank-title"></h2>
+      <p id="rank-flavor" class="tagline"></p>
+      <div id="stats">
+        <div class="stat"><span class="stat-num" id="stat-score">0</span><span class="stat-label" data-i18n="statScore">score</span></div>
+        <div class="stat"><span class="stat-num" id="stat-tier">—</span><span class="stat-label" data-i18n="statTier">highest relic</span></div>
+        <div class="stat"><span class="stat-num" id="stat-chain">0</span><span class="stat-label" data-i18n="statChain">best chain</span></div>
+        <div class="stat"><span class="stat-num" id="stat-youma">0</span><span class="stat-label" data-i18n="statYouma">youma sealed</span></div>
+      </div>
+
+      <div id="board">
+        <h3 id="board-title" data-i18n="leaderboardTitle">Hall of Crystals</h3>
+        <div id="hs-entry" class="hidden">
+          <p id="hs-prompt" data-i18n="hsPrompt">Your relics earned a place in memory — enter your name.</p>
+          <div id="hs-row">
+            <input id="hs-name" type="text" maxlength="24" data-i18n-placeholder="hsPlaceholder" placeholder="your name" />
+            <button id="hs-save" data-i18n="hsSave">Enshrine ✦</button>
+          </div>
+        </div>
+        <table id="leaderboard">
+          <thead><tr>
+            <th data-i18n="colRank">#</th>
+            <th data-i18n="colPlayer">Guardian</th>
+            <th data-i18n="colScore">Score</th>
+          </tr></thead>
+          <tbody id="leaderboard-body"></tbody>
+        </table>
+      </div>
+
+      <button id="retry-btn" data-i18n="retryBtn">Merge again ☾</button>
+    </div>
+  </div>
+
+  <button id="mute-btn" title="toggle sound">♪</button>
+
+  <script src="i18n.js"></script>
+  <script src="leaderboard.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
