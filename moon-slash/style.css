@@ -9,6 +9,7 @@ html, body {
   color: #fdf3ff;
   -webkit-user-select: none;
   user-select: none;
+  overscroll-behavior: none;
 }
 
 #game {

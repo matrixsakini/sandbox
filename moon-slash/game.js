@@ -406,6 +406,18 @@
   canvas.addEventListener('pointerup', release);
   canvas.addEventListener('pointercancel', release);
 
+  // Block Chrome/Safari edge swipe-back while slashing (iOS).
+  // touch-action:none does not cover the edge nav gesture; the touch event
+  // itself must be cancelled with a non-passive listener.
+  const EDGE = 32; // px from either side where iOS starts a nav swipe
+  canvas.addEventListener('touchstart', (e) => {
+    const x = e.touches[0].clientX;
+    if (x <= EDGE || x >= window.innerWidth - EDGE) e.preventDefault();
+  }, { passive: false });
+  canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault(); // stop swipe-back once a drag is in progress
+  }, { passive: false });
+
   // ---------- Game flow ----------
   function startGame() {
     Object.assign(S, {
