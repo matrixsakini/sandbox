@@ -252,6 +252,32 @@ button:hover {
   opacity: 0.6;
 }
 
+/* ---------- Language switch ---------- */
+
+.lang-switch {
+  margin-top: 22px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.lang-switch button {
+  font-size: 13px;
+  font-style: normal;
+  letter-spacing: 2px;
+  padding: 7px 18px;
+  border-radius: 20px;
+  background: rgba(40, 18, 70, 0.5);
+  box-shadow: none;
+  opacity: 0.55;
+}
+
+.lang-switch button.active {
+  opacity: 1;
+  background: linear-gradient(135deg, #a44fd0, #ff7cc0);
+  box-shadow: 0 0 14px rgba(255, 124, 192, 0.5);
+}
+
 /* ---------- Mute ---------- */
 
 #mute-btn {

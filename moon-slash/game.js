@@ -184,13 +184,15 @@
     endT: 0,
   };
 
+  // Attack names stay untranslated in every language; the "combo ×N"
+  // subtitle is localized via the comboSub template.
   const MILESTONES = {
-    5: ['Moon Tiara Action!', 'combo ×5'],
-    10: ['Moon Healing Escalation!', 'combo ×10'],
-    15: ['Moon Crystal Power!', 'combo ×15'],
-    20: ['Moon Gorgeous Meditation!', 'combo ×20'],
-    30: ['Moonlight Legend!', 'combo ×30'],
-    40: ['Starlight Honeymoon Therapy Kiss!', 'combo ×40'],
+    5: 'Moon Tiara Action!',
+    10: 'Moon Healing Escalation!',
+    15: 'Moon Crystal Power!',
+    20: 'Moon Gorgeous Meditation!',
+    30: 'Moonlight Legend!',
+    40: 'Starlight Honeymoon Therapy Kiss!',
   };
 
   function showBanner(text, sub) {
@@ -258,7 +260,7 @@
     recentSlices.push(now);
     if (recentSlices.length === 3) {
       pts += 50;
-      addText(it.x, it.y - it.r - 26, '✦ triple slice +50', '#ffd98a', 18);
+      addText(it.x, it.y - it.r - 26, I18N.t('tripleSlice'), '#ffd98a', 18);
     }
 
     S.score += pts;
@@ -271,17 +273,17 @@
     sfxSlice(S.combo);
 
     const m = MILESTONES[S.combo];
-    if (m) { showBanner(m[0], m[1]); sfxMilestone(); }
+    if (m) { showBanner(m, I18N.t('comboSub').replace('{n}', S.combo)); sfxMilestone(); }
     if (S.light >= 0.99 && !S.queenShown) {
       S.queenShown = true;
-      showBanner('NEO QUEEN SERENITY', 'crystal tokyo shines eternal');
+      showBanner('NEO QUEEN SERENITY', I18N.t('queenSub'));
       sfxMilestone();
     }
   }
 
   function missItem() {
     if (S.mode !== 'playing') return;
-    if (S.combo >= 8) showBanner('the darkness spreads…', 'combo lost');
+    if (S.combo >= 8) showBanner(I18N.t('darknessSpreads'), I18N.t('comboLost'));
     S.combo = 0;
     S.light = clamp(S.light - 0.15, 0.02, 1);
     S.missFlash = 1;
@@ -387,11 +389,12 @@
   }
 
   function rankFor(light) {
-    if (light >= 0.95) return ['Neo Queen Serenity', 'Crystal Tokyo shines eternal. The darkness is no more.'];
-    if (light >= 0.70) return ['Princess Serenity', 'Dawn breaks over the crystal spires. So close to salvation.'];
-    if (light >= 0.45) return ['Super Sailor Moon', 'The shadows retreat — the palace glimmers with hope.'];
-    if (light >= 0.20) return ['Sailor Guardian', 'A few candles against the night. Keep fighting.'];
-    return ['Moonlight Sleeps…', 'The darkness held this time. Crystal Tokyo awaits its queen.'];
+    const t = I18N.t;
+    if (light >= 0.95) return [t('rankQueenTitle'), t('rankQueenFlavor')];
+    if (light >= 0.70) return [t('rankPrincessTitle'), t('rankPrincessFlavor')];
+    if (light >= 0.45) return [t('rankSuperTitle'), t('rankSuperFlavor')];
+    if (light >= 0.20) return [t('rankGuardianTitle'), t('rankGuardianFlavor')];
+    return [t('rankSleepTitle'), t('rankSleepFlavor')];
   }
 
   function finishGame() {
