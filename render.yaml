@@ -3,5 +3,5 @@ services:
   - type: web
     runtime: static
     name: moon-slash
-    staticPublishPath: src/moon-slash
+    staticPublishPath: moon-slash
     buildCommand: ""

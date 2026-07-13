@@ -22,7 +22,7 @@ Pure HTML5 canvas + vanilla JS. No build step, no dependencies, no backend.
 It's a static page — open `index.html` directly, or serve the folder:
 
 ```bash
-cd src/moon-slash
+cd moon-slash
 python3 -m http.server 8000
 # → http://localhost:8000
 ```
@@ -37,4 +37,4 @@ as a free Render **Static Site**:
 3. Deploy — no environment variables or build step required.
 
 (Alternatively: **New → Static Site**, pick this repo, leave the build command
-empty, and set the publish directory to `src/moon-slash`.)
+empty, and set the publish directory to `moon-slash`.)
