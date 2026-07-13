@@ -17,6 +17,17 @@ names ("Moon Tiara Action!", …) and "Neo Queen Serenity" are intentionally
 untranslated. To add a language, add one dictionary entry in `i18n.js`
 and a matching button in `index.html`.
 
+## Game modes
+
+- **Prism** — named for Moon Prism Power, the first transformation: misses
+  break your combo and dim the light, but you always play the full 30 seconds.
+- **Eternal** — named for Eternal Sailor Moon, the final form: one missed
+  shadow and the light collapses — the run ends on the spot. Survive all
+  30 seconds to be ranked as usual.
+
+The selected mode is remembered in `localStorage`. Mode names, like attack
+names, stay untranslated in every language.
+
 ## How to play
 
 - **Swipe** (mouse drag or touch) to slice dark orbs, shards, and wisps.

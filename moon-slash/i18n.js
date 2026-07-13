@@ -36,6 +36,10 @@ window.I18N = (() => {
       statLight: 'radiance',
       statSliced: 'shadows slain',
       retryBtn: 'Slice again ☾',
+      modePrismDesc: 'play the full 30 seconds',
+      modeEternalDesc: 'one miss and the light is lost',
+      eternalDefeatTitle: 'The Light Falters…',
+      eternalDefeatFlavor: 'A single shadow slipped through. Eternal demands perfection.',
     },
     tr: {
       tagline: 'Kristal Tokyo karanlığa gömüldü.',
@@ -64,6 +68,10 @@ window.I18N = (() => {
       statLight: 'parlaklık',
       statSliced: 'yok edilen gölgeler',
       retryBtn: 'Yeniden kes ☾',
+      modePrismDesc: '30 saniyenin tamamını oyna',
+      modeEternalDesc: 'tek kaçırma ve ışık kaybolur',
+      eternalDefeatTitle: 'Işık Sönüyor…',
+      eternalDefeatFlavor: 'Tek bir gölge kaçtı. Eternal kusursuzluk ister.',
     },
   };
 
