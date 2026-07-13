@@ -5,3 +5,10 @@ services:
     name: moon-slash
     staticPublishPath: moon-slash
     buildCommand: ""
+
+  # Moon Merge — static HTML5 canvas merge puzzle, no build step needed.
+  - type: web
+    runtime: static
+    name: moon-merge
+    staticPublishPath: moon-merge
+    buildCommand: ""
