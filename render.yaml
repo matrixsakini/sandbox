@@ -1,0 +1,7 @@
+services:
+  # Moon Slash — static HTML5 canvas game, no build step needed.
+  - type: web
+    runtime: static
+    name: moon-slash
+    staticPublishPath: moon-slash
+    buildCommand: ""
