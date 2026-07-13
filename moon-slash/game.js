@@ -149,6 +149,14 @@
     tone(87, 0.45, 'sine', 0.18, 0.04);
   }
 
+  function sfxDeath() {
+    // A slow descending rumble for the Eternal-mode collapse.
+    tone(130, 0.5, 'triangle', 0.24);
+    tone(98, 0.7, 'sine', 0.2, 0.15);
+    tone(65, 1.1, 'sine', 0.22, 0.35);
+    tone(49, 1.4, 'triangle', 0.16, 0.55);
+  }
+
   function sfxMilestone() {
     [0, 4, 7, 12].forEach((semi, i) => {
       tone(659 * Math.pow(2, semi / 12), 0.3, 'sine', 0.12, i * 0.07);
@@ -162,9 +170,30 @@
     if (!muted) ensureAudio();
   });
 
+  // ---------- Game mode (Prism: full timer / Eternal: one miss ends it) ----------
+  const MODE_KEY = 'moonslash-mode';
+  let gameMode = 'prism';
+  try {
+    const saved = localStorage.getItem(MODE_KEY);
+    if (saved === 'eternal' || saved === 'prism') gameMode = saved;
+  } catch (e) { /* storage unavailable */ }
+
+  function setGameMode(next) {
+    gameMode = next;
+    try { localStorage.setItem(MODE_KEY, next); } catch (e) { /* storage unavailable */ }
+    document.querySelectorAll('[data-mode]').forEach((btn) => {
+      btn.classList.toggle('active', btn.getAttribute('data-mode') === gameMode);
+    });
+  }
+
+  document.querySelectorAll('[data-mode]').forEach((btn) => {
+    btn.addEventListener('click', () => setGameMode(btn.getAttribute('data-mode')));
+  });
+  setGameMode(gameMode);
+
   // ---------- Game state ----------
   const S = {
-    mode: 'menu',           // menu | playing | ending | end
+    mode: 'menu',           // menu | playing | dying | ending | end
     time: SESSION_SECONDS,
     elapsed: 0,
     score: 0,
@@ -283,6 +312,16 @@
 
   function missItem() {
     if (S.mode !== 'playing') return;
+    if (gameMode === 'eternal') {
+      // Sudden death: the light collapses, then the results screen.
+      S.mode = 'dying';
+      S.endT = 1.6;
+      S.combo = 0;
+      S.light = 0;
+      S.missFlash = 1;
+      sfxDeath();
+      return;
+    }
     if (S.combo >= 8) showBanner(I18N.t('darknessSpreads'), I18N.t('comboLost'));
     S.combo = 0;
     S.light = clamp(S.light - 0.15, 0.02, 1);
@@ -397,11 +436,13 @@
     return [t('rankSleepTitle'), t('rankSleepFlavor')];
   }
 
-  function finishGame() {
+  function finishGame(defeated) {
     S.mode = 'end';
     ui.hud.classList.add('hidden');
     ui.banner.classList.add('hidden');
-    const [title, flavor] = rankFor(S.light);
+    const [title, flavor] = defeated
+      ? [I18N.t('eternalDefeatTitle'), I18N.t('eternalDefeatFlavor')]
+      : rankFor(S.light);
     ui.rankTitle.textContent = title;
     ui.rankFlavor.textContent = flavor;
     ui.statScore.textContent = S.score;
@@ -436,6 +477,11 @@
     } else if (S.mode === 'ending') {
       S.endT -= dt;
       if (S.endT <= 0) finishGame();
+    } else if (S.mode === 'dying') {
+      // Eternal collapse: hold the flash while the light drains to black.
+      S.missFlash = Math.max(S.missFlash, 0.5);
+      S.endT -= dt;
+      if (S.endT <= 0) finishGame(true);
     }
 
     S.shownLight = lerp(S.shownLight, S.light, Math.min(1, dt * 3.5));
@@ -790,7 +836,7 @@
 
   // ---------- HUD ----------
   function renderHud() {
-    if (S.mode !== 'playing' && S.mode !== 'ending') return;
+    if (S.mode !== 'playing' && S.mode !== 'ending' && S.mode !== 'dying') return;
     ui.score.textContent = S.score;
     ui.combo.textContent = S.combo > 0 ? '×' + S.combo : '—';
     ui.combo.classList.toggle('hot', S.combo >= 10);
