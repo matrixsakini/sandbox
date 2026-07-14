@@ -12,8 +12,8 @@
   // Usagi's treasures, from stardust to the Silver Crystal.
   const TIERS = [
     { key: 'tierStardust',      base: 5 },
-    { key: 'tierMoonStone',     base: 15 },
-    { key: 'tierCrescent',      base: 40 },
+    { key: 'tierCrescentMoon',  base: 15 },
+    { key: 'tierFullMoon',      base: 40 },
     { key: 'tierBrooch',        base: 100 },
     { key: 'tierCrystalStar',   base: 250 },
     { key: 'tierCosmicHeart',   base: 600 },
@@ -1178,33 +1178,23 @@
     ctx.shadowColor = tier >= 8 ? '#fff6d8' : '#ff9ad5';
     ctx.shadowBlur = 6 + tier * 2;
 
+    // Tiers 1-3 are a waxing moon — star, crescent, full — so the next
+    // form is always guessable at a glance.
     if (tier === 1) {
-      // Stardust: a loose cluster of tiny stars.
+      // Stardust: a single small golden star, the smallest spark of light.
       ctx.fillStyle = '#ffd98a';
-      drawStar(0, 0, r * 0.5, t * 0.4);
-      ctx.fillStyle = '#fff3fb';
-      drawStar(-r * 0.52, -r * 0.4, r * 0.3, -t * 0.6);
-      drawStar(r * 0.52, r * 0.35, r * 0.26, t * 0.5);
-    } else if (tier === 2) {
-      // Moon Stone: a cratered lavender pebble.
-      const g = ctx.createRadialGradient(-r * 0.3, -r * 0.3, r * 0.1, 0, 0, r);
-      g.addColorStop(0, '#e6ddf7');
-      g.addColorStop(1, '#8f82b8');
-      ctx.fillStyle = g;
-      ctx.beginPath();
-      ctx.arc(0, 0, r * 0.85, 0, Math.PI * 2);
-      ctx.fill();
+      drawStar(0, 0, r * 0.62, t * 0.4);
       ctx.shadowBlur = 0;
-      ctx.fillStyle = 'rgba(90, 78, 130, 0.5)';
+      ctx.fillStyle = '#fff3fb';
       ctx.beginPath();
-      ctx.ellipse(-r * 0.25, r * 0.15, r * 0.2, r * 0.14, 0.4, 0, Math.PI * 2);
+      ctx.arc(0, 0, r * 0.1, 0, Math.PI * 2);
       ctx.fill();
-      ctx.beginPath();
-      ctx.ellipse(r * 0.3, -r * 0.28, r * 0.13, r * 0.09, -0.3, 0, Math.PI * 2);
-      ctx.fill();
-    } else if (tier === 3) {
-      // Crescent Crystal: the golden crescent moon.
-      ctx.fillStyle = '#ffd98a';
+    } else if (tier === 2) {
+      // Crescent Moon: the star has grown into a sliver of moon.
+      const g = ctx.createLinearGradient(-r, -r, 0, r);
+      g.addColorStop(0, '#fffbe8');
+      g.addColorStop(1, '#ffd98a');
+      ctx.fillStyle = g;
       ctx.save();
       ctx.rotate(-0.35);
       crescentPath(r * 0.9);
@@ -1216,6 +1206,28 @@
       ctx.arc(0, 0, r * 0.78, Math.PI * 0.62, Math.PI * 1.38);
       ctx.stroke();
       ctx.restore();
+    } else if (tier === 3) {
+      // Full Moon: the crescent has waxed full — a glowing cratered disc.
+      ctx.shadowColor = '#fff6d8';
+      ctx.shadowBlur = 14;
+      const g = ctx.createRadialGradient(-r * 0.3, -r * 0.3, r * 0.1, 0, 0, r);
+      g.addColorStop(0, '#fffdf2');
+      g.addColorStop(1, '#e8d8a8');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 0.85, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = 'rgba(200, 175, 120, 0.45)';
+      ctx.beginPath();
+      ctx.ellipse(-r * 0.25, r * 0.15, r * 0.2, r * 0.14, 0.4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(r * 0.3, -r * 0.28, r * 0.13, r * 0.09, -0.3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(r * 0.05, -r * 0.05, r * 0.09, r * 0.07, 0.2, 0, Math.PI * 2);
+      ctx.fill();
     } else if (tier === 4) {
       // Transformation Brooch: pink disc, gold rim, crescent, four guardian gems.
       const g = ctx.createRadialGradient(-r * 0.25, -r * 0.25, r * 0.1, 0, 0, r);
