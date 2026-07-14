@@ -12,8 +12,8 @@
   // Usagi's treasures, from stardust to the Silver Crystal.
   const TIERS = [
     { key: 'tierStardust',      base: 5 },
-    { key: 'tierMoonStone',     base: 15 },
-    { key: 'tierCrescent',      base: 40 },
+    { key: 'tierCrescentMoon',  base: 15 },
+    { key: 'tierFullMoon',      base: 40 },
     { key: 'tierBrooch',        base: 100 },
     { key: 'tierCrystalStar',   base: 250 },
     { key: 'tierCosmicHeart',   base: 600 },
@@ -57,6 +57,7 @@
     startBtn: document.getElementById('start-btn'),
     retryBtn: document.getElementById('retry-btn'),
     muteBtn: document.getElementById('mute-btn'),
+    undoBtn: document.getElementById('undo-btn'),
     leaderboardBody: document.getElementById('leaderboard-body'),
     hsEntry: document.getElementById('hs-entry'),
     hsName: document.getElementById('hs-name'),
@@ -245,6 +246,8 @@
     if (!muted) ensureAudio();
   });
 
+  if (ui.undoBtn) ui.undoBtn.addEventListener('click', () => undo());
+
   // ---------- Game state ----------
   const S = {
     mode: 'menu',        // menu | playing | end
@@ -270,6 +273,52 @@
   // Piece: { type: 'item'|'youma'|'crystal', tier, phase, fx, merge }
   function makePiece(type, tier) {
     return { type, tier: tier || 0, phase: rand(0, Math.PI * 2), fx: null, merge: null };
+  }
+
+  // ---------- One-step undo ----------
+  let undoSnap = null;
+
+  function copyPiece(p) {
+    return p ? { type: p.type, tier: p.tier, phase: p.phase, fx: null, merge: null } : null;
+  }
+
+  function snapshot() {
+    return {
+      board: S.board.map(row => row.map(copyPiece)),
+      current: copyPiece(S.current),
+      queue: S.queue.map(copyPiece),
+      pocket: copyPiece(S.pocket),
+      swapLocked: S.swapLocked,
+      score: S.score,
+      chain: S.chain,
+      bestChain: S.bestChain,
+      highestTier: S.highestTier,
+      youmaSealed: S.youmaSealed,
+      light: S.light,
+      bag: bag.slice(),
+      milestonesShown: { ...S.milestonesShown },
+    };
+  }
+
+  function undo() {
+    if (S.mode !== 'playing' || busy() || !undoSnap) return;
+    const snap = undoSnap;
+    S.board = snap.board;
+    S.current = snap.current;
+    S.queue = snap.queue;
+    S.pocket = snap.pocket;
+    S.swapLocked = snap.swapLocked;
+    S.score = snap.score;
+    S.chain = snap.chain;
+    S.bestChain = snap.bestChain;
+    S.highestTier = snap.highestTier;
+    S.youmaSealed = snap.youmaSealed;
+    S.light = snap.light;
+    bag = snap.bag;
+    S.milestonesShown = snap.milestonesShown;
+    undoSnap = null;
+    tone(392, 0.12, 'sine', 0.08);
+    tone(262, 0.16, 'sine', 0.08, 0.06);
   }
 
   function popFx(p) { p.fx = { kind: 'pop', t: 0, dur: 0.16 }; }
@@ -371,6 +420,7 @@
   // ---------- Turn flow ----------
   function tryPlace(r, c) {
     if (S.board[r][c]) return;
+    undoSnap = snapshot();
     const piece = S.current;
     S.current = null;
     S.swapLocked = false;
@@ -530,11 +580,13 @@
   function pocketTap() {
     if (!S.pocket) {
       // Stashing is not a turn: a new piece is drawn but youma do not move.
+      undoSnap = snapshot();
       S.pocket = S.current;
       S.current = S.queue.shift();
       S.queue.push(bagDraw());
       sfxPocket();
     } else if (!S.swapLocked) {
+      undoSnap = snapshot();
       const tmp = S.current;
       S.current = S.pocket;
       S.pocket = tmp;
@@ -589,9 +641,11 @@
     refillBag(6); // no youma in the opening hand
     S.current = bagDraw();
     S.queue = [bagDraw(), bagDraw()];
+    undoSnap = null;
     ui.menu.classList.add('hidden');
     ui.end.classList.add('hidden');
     ui.hud.classList.remove('hidden');
+    if (ui.undoBtn) ui.undoBtn.classList.remove('hidden');
     ensureAudio();
   }
 
@@ -607,6 +661,7 @@
   function finishGame() {
     S.mode = 'end';
     ui.hud.classList.add('hidden');
+    if (ui.undoBtn) ui.undoBtn.classList.add('hidden');
     ui.banner.classList.add('hidden');
     const [title, flavor] = rankFor(S.highestTier);
     ui.rankTitle.textContent = title;
@@ -736,7 +791,9 @@
   }
 
   function hitPocket(x, y) {
-    return tray && Math.hypot(x - tray.pocket.x, y - tray.pocket.y) <= tray.pocket.r * 1.25;
+    return tray &&
+      Math.abs(x - tray.pocket.x) <= tray.pocket.r * 1.15 &&
+      Math.abs(y - tray.pocket.y) <= tray.pocket.r * 1.15;
   }
 
   canvas.addEventListener('pointerdown', (e) => {
@@ -1050,8 +1107,8 @@
   }
 
   function renderTray(nowMs) {
-    const label = (txt, x, y) => {
-      ctx.fillStyle = 'rgba(253, 243, 255, 0.55)';
+    const label = (txt, x, y, color) => {
+      ctx.fillStyle = color || 'rgba(253, 243, 255, 0.55)';
       ctx.font = `${Math.max(9, cell * 0.14)}px Georgia, serif`;
       ctx.textAlign = 'center';
       ctx.fillText(txt.toUpperCase(), x, y);
@@ -1071,9 +1128,36 @@
       ctx.restore();
     };
 
-    // Current piece
+    // A small gold chevron midway between two adjacent slot edges, showing
+    // the flow of pieces from current → next → next.
+    const chevron = (xa, ra, xb, rb, y) => {
+      const x = (xa + ra + (xb - rb)) / 2;
+      ctx.save();
+      ctx.globalAlpha = 0.5;
+      ctx.fillStyle = '#ffd98a';
+      ctx.font = `${Math.max(9, cell * 0.22)}px Georgia, serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('›', x, y);
+      ctx.restore();
+    };
+
+    // NEXT group: current piece + the two-deep queue, drawn as circles with
+    // one shared label and chevrons showing the flow between them.
     slot(tray.cur, false, false);
-    label(I18N.t('nextLabel'), tray.cur.x, tray.cur.y - tray.cur.r - cell * 0.14);
+    S.queue.forEach((p, i) => {
+      const s = tray.next[i];
+      if (!s) return;
+      slot(s, false, true);
+    });
+    if (tray.next[0]) chevron(tray.cur.x, tray.cur.r, tray.next[0].x, tray.next[0].r, tray.cur.y);
+    if (tray.next[0] && tray.next[1]) {
+      chevron(tray.next[0].x, tray.next[0].r, tray.next[1].x, tray.next[1].r, tray.cur.y);
+    }
+    const groupLeft = tray.cur.x - tray.cur.r;
+    const groupRight = tray.next[1] ? tray.next[1].x + tray.next[1].r : tray.cur.x + tray.cur.r;
+    label(I18N.t('nextLabel'), (groupLeft + groupRight) / 2, tray.cur.y - tray.cur.r - cell * 0.14);
+
     if (S.current) {
       drawPieceAt(S.current, tray.cur.x, tray.cur.y, tray.cur.r * 0.72, nowMs);
       const name = S.current.type === 'youma' ? I18N.t('youmaName') : I18N.t(TIERS[S.current.tier - 1].key);
@@ -1083,24 +1167,42 @@
       ctx.fillText(name, bx + cell * 0.1, tray.cur.y + tray.cur.r + cell * 0.4);
     }
 
-    // Upcoming queue
     S.queue.forEach((p, i) => {
       const s = tray.next[i];
       if (!s || !p) return;
-      slot(s, false, true);
       ctx.save();
       ctx.globalAlpha = 0.8 - i * 0.25;
       drawPieceAt(p, s.x, s.y, s.r * 0.7, nowMs);
       ctx.restore();
     });
 
-    // Subspace pocket
-    slot(tray.pocket, !S.pocket, S.swapLocked && S.pocket);
-    label(I18N.t('pocketLabel'), tray.pocket.x, tray.pocket.y - tray.pocket.r - cell * 0.14);
+    // Subspace pocket — a gold rounded square, visually distinct from the
+    // circular NEXT group so it always reads as storage, not an upcoming piece.
+    const pk = tray.pocket;
+    const dim = S.swapLocked && S.pocket;
+    ctx.save();
+    ctx.globalAlpha = dim ? 0.5 : 1;
+    ctx.fillStyle = 'rgba(58, 40, 14, 0.5)';
+    ctx.strokeStyle = 'rgba(255, 217, 138, 0.65)';
+    ctx.lineWidth = 1.5;
+    if (!S.pocket) ctx.setLineDash([5, 5]);
+    roundRect(pk.x - pk.r, pk.y - pk.r, pk.r * 2, pk.r * 2, pk.r * 0.3);
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+    label(I18N.t('pocketLabel'), pk.x, pk.y - pk.r - cell * 0.14, 'rgba(255, 217, 138, 0.8)');
     if (S.pocket) {
       ctx.save();
       ctx.globalAlpha = S.swapLocked ? 0.55 : 1;
-      drawPieceAt(S.pocket, tray.pocket.x, tray.pocket.y, tray.pocket.r * 0.68, nowMs);
+      drawPieceAt(S.pocket, pk.x, pk.y, pk.r * 0.68, nowMs);
+      ctx.restore();
+    } else {
+      ctx.save();
+      ctx.fillStyle = 'rgba(255, 217, 138, 0.3)';
+      ctx.font = `${pk.r * 0.9}px Georgia, serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('☾', pk.x, pk.y);
       ctx.restore();
     }
   }
@@ -1178,33 +1280,23 @@
     ctx.shadowColor = tier >= 8 ? '#fff6d8' : '#ff9ad5';
     ctx.shadowBlur = 6 + tier * 2;
 
+    // Tiers 1-3 are a waxing moon — star, crescent, full — so the next
+    // form is always guessable at a glance.
     if (tier === 1) {
-      // Stardust: a loose cluster of tiny stars.
+      // Stardust: a single small golden star, the smallest spark of light.
       ctx.fillStyle = '#ffd98a';
-      drawStar(0, 0, r * 0.5, t * 0.4);
-      ctx.fillStyle = '#fff3fb';
-      drawStar(-r * 0.52, -r * 0.4, r * 0.3, -t * 0.6);
-      drawStar(r * 0.52, r * 0.35, r * 0.26, t * 0.5);
-    } else if (tier === 2) {
-      // Moon Stone: a cratered lavender pebble.
-      const g = ctx.createRadialGradient(-r * 0.3, -r * 0.3, r * 0.1, 0, 0, r);
-      g.addColorStop(0, '#e6ddf7');
-      g.addColorStop(1, '#8f82b8');
-      ctx.fillStyle = g;
-      ctx.beginPath();
-      ctx.arc(0, 0, r * 0.85, 0, Math.PI * 2);
-      ctx.fill();
+      drawStar(0, 0, r * 0.62, t * 0.4);
       ctx.shadowBlur = 0;
-      ctx.fillStyle = 'rgba(90, 78, 130, 0.5)';
+      ctx.fillStyle = '#fff3fb';
       ctx.beginPath();
-      ctx.ellipse(-r * 0.25, r * 0.15, r * 0.2, r * 0.14, 0.4, 0, Math.PI * 2);
+      ctx.arc(0, 0, r * 0.1, 0, Math.PI * 2);
       ctx.fill();
-      ctx.beginPath();
-      ctx.ellipse(r * 0.3, -r * 0.28, r * 0.13, r * 0.09, -0.3, 0, Math.PI * 2);
-      ctx.fill();
-    } else if (tier === 3) {
-      // Crescent Crystal: the golden crescent moon.
-      ctx.fillStyle = '#ffd98a';
+    } else if (tier === 2) {
+      // Crescent Moon: the star has grown into a sliver of moon.
+      const g = ctx.createLinearGradient(-r, -r, 0, r);
+      g.addColorStop(0, '#fffbe8');
+      g.addColorStop(1, '#ffd98a');
+      ctx.fillStyle = g;
       ctx.save();
       ctx.rotate(-0.35);
       crescentPath(r * 0.9);
@@ -1216,6 +1308,28 @@
       ctx.arc(0, 0, r * 0.78, Math.PI * 0.62, Math.PI * 1.38);
       ctx.stroke();
       ctx.restore();
+    } else if (tier === 3) {
+      // Full Moon: the crescent has waxed full — a glowing cratered disc.
+      ctx.shadowColor = '#fff6d8';
+      ctx.shadowBlur = 14;
+      const g = ctx.createRadialGradient(-r * 0.3, -r * 0.3, r * 0.1, 0, 0, r);
+      g.addColorStop(0, '#fffdf2');
+      g.addColorStop(1, '#e8d8a8');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 0.85, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = 'rgba(200, 175, 120, 0.45)';
+      ctx.beginPath();
+      ctx.ellipse(-r * 0.25, r * 0.15, r * 0.2, r * 0.14, 0.4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(r * 0.3, -r * 0.28, r * 0.13, r * 0.09, -0.3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(r * 0.05, -r * 0.05, r * 0.09, r * 0.07, 0.2, 0, Math.PI * 2);
+      ctx.fill();
     } else if (tier === 4) {
       // Transformation Brooch: pink disc, gold rim, crescent, four guardian gems.
       const g = ctx.createRadialGradient(-r * 0.25, -r * 0.25, r * 0.1, 0, 0, r);
@@ -1425,6 +1539,7 @@
     ui.chain.textContent = S.bestChain > 0 ? '×' + S.bestChain : '—';
     ui.chain.classList.toggle('hot', S.bestChain >= 3);
     ui.lightFill.style.width = Math.round(S.shownLight * 100) + '%';
+    if (ui.undoBtn) ui.undoBtn.classList.toggle('disabled', !undoSnap || busy());
   }
 
   // ---------- Main loop ----------
@@ -1449,6 +1564,8 @@
     place: tryPlace,
     pocketTap,
     startGame,
+    undo,
+    snap: () => !!undoSnap,
     setCell(r, c, spec) {
       S.board[r][c] = spec == null ? null
         : spec === 'y' ? makePiece('youma')

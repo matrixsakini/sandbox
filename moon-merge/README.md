@@ -25,9 +25,12 @@ intentionally untranslated. To add a language, add one dictionary entry in
 
 ## The merge chain
 
-Stardust → Moon Stone → Crescent Crystal → Transformation Brooch →
+Stardust → Crescent Moon → Full Moon → Transformation Brooch →
 Crystal Star → Cosmic Heart Compact → Crisis Moon Compact →
 Eternal Moon Article → Silver Crystal.
+
+The first three tiers wax like the moon — a spark of stardust becomes a
+crescent, the crescent swells full — so the next form is always guessable.
 
 Reaching a new brooch for the first time triggers its transformation phrase.
 Higher tiers are worth more, and cascading chain merges multiply the points.
