@@ -57,6 +57,7 @@
     startBtn: document.getElementById('start-btn'),
     retryBtn: document.getElementById('retry-btn'),
     muteBtn: document.getElementById('mute-btn'),
+    undoBtn: document.getElementById('undo-btn'),
     leaderboardBody: document.getElementById('leaderboard-body'),
     hsEntry: document.getElementById('hs-entry'),
     hsName: document.getElementById('hs-name'),
@@ -245,6 +246,8 @@
     if (!muted) ensureAudio();
   });
 
+  if (ui.undoBtn) ui.undoBtn.addEventListener('click', () => undo());
+
   // ---------- Game state ----------
   const S = {
     mode: 'menu',        // menu | playing | end
@@ -270,6 +273,52 @@
   // Piece: { type: 'item'|'youma'|'crystal', tier, phase, fx, merge }
   function makePiece(type, tier) {
     return { type, tier: tier || 0, phase: rand(0, Math.PI * 2), fx: null, merge: null };
+  }
+
+  // ---------- One-step undo ----------
+  let undoSnap = null;
+
+  function copyPiece(p) {
+    return p ? { type: p.type, tier: p.tier, phase: p.phase, fx: null, merge: null } : null;
+  }
+
+  function snapshot() {
+    return {
+      board: S.board.map(row => row.map(copyPiece)),
+      current: copyPiece(S.current),
+      queue: S.queue.map(copyPiece),
+      pocket: copyPiece(S.pocket),
+      swapLocked: S.swapLocked,
+      score: S.score,
+      chain: S.chain,
+      bestChain: S.bestChain,
+      highestTier: S.highestTier,
+      youmaSealed: S.youmaSealed,
+      light: S.light,
+      bag: bag.slice(),
+      milestonesShown: { ...S.milestonesShown },
+    };
+  }
+
+  function undo() {
+    if (S.mode !== 'playing' || busy() || !undoSnap) return;
+    const snap = undoSnap;
+    S.board = snap.board;
+    S.current = snap.current;
+    S.queue = snap.queue;
+    S.pocket = snap.pocket;
+    S.swapLocked = snap.swapLocked;
+    S.score = snap.score;
+    S.chain = snap.chain;
+    S.bestChain = snap.bestChain;
+    S.highestTier = snap.highestTier;
+    S.youmaSealed = snap.youmaSealed;
+    S.light = snap.light;
+    bag = snap.bag;
+    S.milestonesShown = snap.milestonesShown;
+    undoSnap = null;
+    tone(392, 0.12, 'sine', 0.08);
+    tone(262, 0.16, 'sine', 0.08, 0.06);
   }
 
   function popFx(p) { p.fx = { kind: 'pop', t: 0, dur: 0.16 }; }
@@ -371,6 +420,7 @@
   // ---------- Turn flow ----------
   function tryPlace(r, c) {
     if (S.board[r][c]) return;
+    undoSnap = snapshot();
     const piece = S.current;
     S.current = null;
     S.swapLocked = false;
@@ -530,11 +580,13 @@
   function pocketTap() {
     if (!S.pocket) {
       // Stashing is not a turn: a new piece is drawn but youma do not move.
+      undoSnap = snapshot();
       S.pocket = S.current;
       S.current = S.queue.shift();
       S.queue.push(bagDraw());
       sfxPocket();
     } else if (!S.swapLocked) {
+      undoSnap = snapshot();
       const tmp = S.current;
       S.current = S.pocket;
       S.pocket = tmp;
@@ -589,9 +641,11 @@
     refillBag(6); // no youma in the opening hand
     S.current = bagDraw();
     S.queue = [bagDraw(), bagDraw()];
+    undoSnap = null;
     ui.menu.classList.add('hidden');
     ui.end.classList.add('hidden');
     ui.hud.classList.remove('hidden');
+    if (ui.undoBtn) ui.undoBtn.classList.remove('hidden');
     ensureAudio();
   }
 
@@ -607,6 +661,7 @@
   function finishGame() {
     S.mode = 'end';
     ui.hud.classList.add('hidden');
+    if (ui.undoBtn) ui.undoBtn.classList.add('hidden');
     ui.banner.classList.add('hidden');
     const [title, flavor] = rankFor(S.highestTier);
     ui.rankTitle.textContent = title;
@@ -736,7 +791,9 @@
   }
 
   function hitPocket(x, y) {
-    return tray && Math.hypot(x - tray.pocket.x, y - tray.pocket.y) <= tray.pocket.r * 1.25;
+    return tray &&
+      Math.abs(x - tray.pocket.x) <= tray.pocket.r * 1.15 &&
+      Math.abs(y - tray.pocket.y) <= tray.pocket.r * 1.15;
   }
 
   canvas.addEventListener('pointerdown', (e) => {
@@ -1050,8 +1107,8 @@
   }
 
   function renderTray(nowMs) {
-    const label = (txt, x, y) => {
-      ctx.fillStyle = 'rgba(253, 243, 255, 0.55)';
+    const label = (txt, x, y, color) => {
+      ctx.fillStyle = color || 'rgba(253, 243, 255, 0.55)';
       ctx.font = `${Math.max(9, cell * 0.14)}px Georgia, serif`;
       ctx.textAlign = 'center';
       ctx.fillText(txt.toUpperCase(), x, y);
@@ -1071,9 +1128,36 @@
       ctx.restore();
     };
 
-    // Current piece
+    // A small gold chevron midway between two adjacent slot edges, showing
+    // the flow of pieces from current → next → next.
+    const chevron = (xa, ra, xb, rb, y) => {
+      const x = (xa + ra + (xb - rb)) / 2;
+      ctx.save();
+      ctx.globalAlpha = 0.5;
+      ctx.fillStyle = '#ffd98a';
+      ctx.font = `${Math.max(9, cell * 0.22)}px Georgia, serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('›', x, y);
+      ctx.restore();
+    };
+
+    // NEXT group: current piece + the two-deep queue, drawn as circles with
+    // one shared label and chevrons showing the flow between them.
     slot(tray.cur, false, false);
-    label(I18N.t('nextLabel'), tray.cur.x, tray.cur.y - tray.cur.r - cell * 0.14);
+    S.queue.forEach((p, i) => {
+      const s = tray.next[i];
+      if (!s) return;
+      slot(s, false, true);
+    });
+    if (tray.next[0]) chevron(tray.cur.x, tray.cur.r, tray.next[0].x, tray.next[0].r, tray.cur.y);
+    if (tray.next[0] && tray.next[1]) {
+      chevron(tray.next[0].x, tray.next[0].r, tray.next[1].x, tray.next[1].r, tray.cur.y);
+    }
+    const groupLeft = tray.cur.x - tray.cur.r;
+    const groupRight = tray.next[1] ? tray.next[1].x + tray.next[1].r : tray.cur.x + tray.cur.r;
+    label(I18N.t('nextLabel'), (groupLeft + groupRight) / 2, tray.cur.y - tray.cur.r - cell * 0.14);
+
     if (S.current) {
       drawPieceAt(S.current, tray.cur.x, tray.cur.y, tray.cur.r * 0.72, nowMs);
       const name = S.current.type === 'youma' ? I18N.t('youmaName') : I18N.t(TIERS[S.current.tier - 1].key);
@@ -1083,24 +1167,42 @@
       ctx.fillText(name, bx + cell * 0.1, tray.cur.y + tray.cur.r + cell * 0.4);
     }
 
-    // Upcoming queue
     S.queue.forEach((p, i) => {
       const s = tray.next[i];
       if (!s || !p) return;
-      slot(s, false, true);
       ctx.save();
       ctx.globalAlpha = 0.8 - i * 0.25;
       drawPieceAt(p, s.x, s.y, s.r * 0.7, nowMs);
       ctx.restore();
     });
 
-    // Subspace pocket
-    slot(tray.pocket, !S.pocket, S.swapLocked && S.pocket);
-    label(I18N.t('pocketLabel'), tray.pocket.x, tray.pocket.y - tray.pocket.r - cell * 0.14);
+    // Subspace pocket — a gold rounded square, visually distinct from the
+    // circular NEXT group so it always reads as storage, not an upcoming piece.
+    const pk = tray.pocket;
+    const dim = S.swapLocked && S.pocket;
+    ctx.save();
+    ctx.globalAlpha = dim ? 0.5 : 1;
+    ctx.fillStyle = 'rgba(58, 40, 14, 0.5)';
+    ctx.strokeStyle = 'rgba(255, 217, 138, 0.65)';
+    ctx.lineWidth = 1.5;
+    if (!S.pocket) ctx.setLineDash([5, 5]);
+    roundRect(pk.x - pk.r, pk.y - pk.r, pk.r * 2, pk.r * 2, pk.r * 0.3);
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+    label(I18N.t('pocketLabel'), pk.x, pk.y - pk.r - cell * 0.14, 'rgba(255, 217, 138, 0.8)');
     if (S.pocket) {
       ctx.save();
       ctx.globalAlpha = S.swapLocked ? 0.55 : 1;
-      drawPieceAt(S.pocket, tray.pocket.x, tray.pocket.y, tray.pocket.r * 0.68, nowMs);
+      drawPieceAt(S.pocket, pk.x, pk.y, pk.r * 0.68, nowMs);
+      ctx.restore();
+    } else {
+      ctx.save();
+      ctx.fillStyle = 'rgba(255, 217, 138, 0.3)';
+      ctx.font = `${pk.r * 0.9}px Georgia, serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('☾', pk.x, pk.y);
       ctx.restore();
     }
   }
@@ -1437,6 +1539,7 @@
     ui.chain.textContent = S.bestChain > 0 ? '×' + S.bestChain : '—';
     ui.chain.classList.toggle('hot', S.bestChain >= 3);
     ui.lightFill.style.width = Math.round(S.shownLight * 100) + '%';
+    if (ui.undoBtn) ui.undoBtn.classList.toggle('disabled', !undoSnap || busy());
   }
 
   // ---------- Main loop ----------
@@ -1461,6 +1564,8 @@
     place: tryPlace,
     pocketTap,
     startGame,
+    undo,
+    snap: () => !!undoSnap,
     setCell(r, c, spec) {
       S.board[r][c] = spec == null ? null
         : spec === 'y' ? makePiece('youma')
