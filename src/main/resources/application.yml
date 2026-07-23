@@ -18,6 +18,22 @@ trivia:
   active-session-ttl: 30m
   completed-session-ttl: 5m
 
+chores:
+  board-ttl: 35d
+  zone: ${CHORES_ZONE:UTC}
+  people:
+    - ${CHORES_PERSON_1:Person 1}
+    - ${CHORES_PERSON_2:Person 2}
+  list:
+    - { id: dishes, label: Dishes }
+    - { id: laundry, label: Laundry }
+    - { id: trash, label: "Trash & recycling" }
+    - { id: vacuum, label: Vacuum }
+    - { id: bathroom, label: Bathroom }
+    - { id: groceries, label: Groceries }
+    - { id: cooking, label: Cooking }
+    - { id: plants, label: Water plants }
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html

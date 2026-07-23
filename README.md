@@ -130,6 +130,23 @@ The repo includes a `render.yaml` Blueprint and a `Dockerfile` for one-click Ren
 
 The free tier spins down after 15 minutes of inactivity. Expect a ~30s cold start on first request after idle.
 
+## Chore Tracker (demo)
+
+A small shared chore board for two people, served by this same service at **`/chores.html`**.
+Tap a cell to mark a chore done; state is shared across devices (stored in the same Redis as
+the trivia sessions, under `chores:*` keys) and the page polls every few seconds.
+
+- **Weekly reset:** marks are stored in one Redis hash per ISO week (`chores:2026-W29`), so
+  every Monday the board starts empty automatically.
+- **Retention:** each week's board expires after `chores.board-ttl` (default **35 days**).
+- **Config:** chore list, people names (`CHORES_PERSON_1` / `CHORES_PERSON_2`), and reset
+  timezone (`CHORES_ZONE`, default UTC) are set in `application.yml`.
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/api/v1/chores/board` | Current week's board |
+| `PUT` | `/api/v1/chores/board/marks` | Mark/unmark (`{ choreId, person, done }`) |
+
 ## Question Bank (Phase 1)
 
 Static questions are loaded from `src/main/resources/questions/` at startup (one JSON file per topic, auto-discovered).
