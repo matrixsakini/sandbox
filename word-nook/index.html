@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Word Nook — hear the room</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛋️</text></svg>">
+</head>
+<body>
+  <canvas id="game"></canvas>
+
+  <!-- In-game heads-up bar -->
+  <div id="hud" class="hidden">
+    <div id="lang-chip"><span id="lang-flag">🇳🇱</span><span id="lang-name">Nederlands</span></div>
+    <div id="word-count"><span id="count-num">0</span><span class="count-label">words</span></div>
+    <button id="words-btn">📖 Words</button>
+    <button id="mute-btn" title="toggle chime">♪</button>
+  </div>
+
+  <!-- Floating label shown when you hear a word -->
+  <div id="label" class="hidden">
+    <button id="label-play" title="hear it again">▶</button>
+    <div id="label-text">
+      <span id="label-word">tafel</span>
+      <span id="label-romaji" class="hidden"></span>
+      <span id="label-gloss">table</span>
+    </div>
+  </div>
+
+  <!-- One-time note when the target language has no installed voice -->
+  <div id="voice-note" class="hidden"></div>
+
+  <!-- Start menu -->
+  <div id="menu" class="overlay">
+    <div class="panel">
+      <div class="logo">🛋️ ☕ 🐱</div>
+      <h1>Word Nook</h1>
+      <p class="tagline">A cozy little room. Wander in, tap things, and hear what they're called.</p>
+      <p class="instructions">
+        Move with the arrow keys or WASD — or just tap where you want to go.<br>
+        Walk up to the sofa, the coffee corner, the sleeping cat…<br>
+        every word you hear is saved to your list to review later.
+      </p>
+      <p class="learn-label">I want to learn…</p>
+      <div class="lang-switch">
+        <button class="lang-card" data-learn="en"><span class="lc-flag">🇬🇧</span><span class="lc-name">English</span></button>
+        <button class="lang-card" data-learn="tr"><span class="lc-flag">🇹🇷</span><span class="lc-name">Türkçe</span></button>
+        <button class="lang-card" data-learn="nl"><span class="lc-flag">🇳🇱</span><span class="lc-name">Nederlands</span></button>
+        <button class="lang-card" data-learn="ja"><span class="lc-flag">🇯🇵</span><span class="lc-name">日本語</span></button>
+      </div>
+      <button id="start-btn">Step inside ✿</button>
+      <p class="hint">phase 1 · explore — a mystery to solve is coming later</p>
+    </div>
+  </div>
+
+  <!-- Collected-words review -->
+  <div id="words" class="overlay hidden">
+    <div class="panel">
+      <h2>Your words</h2>
+      <p id="words-sub" class="tagline">Everything you've heard so far.</p>
+      <div id="words-list"></div>
+      <p id="words-empty" class="empty hidden">You haven't heard any words yet — go tap something!</p>
+      <div class="words-actions">
+        <button id="words-back">← Back to the room</button>
+        <button id="words-clear" class="ghost">Clear list</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="vocab.js"></script>
+  <script src="speech.js"></script>
+  <script src="wordlist.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

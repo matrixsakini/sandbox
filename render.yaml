@@ -12,3 +12,10 @@ services:
     name: moon-merge
     staticPublishPath: moon-merge
     buildCommand: ""
+
+  # Word Nook — static language-learning room, no build step needed.
+  - type: web
+    runtime: static
+    name: word-nook
+    staticPublishPath: word-nook
+    buildCommand: ""
