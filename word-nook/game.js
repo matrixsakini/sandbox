@@ -199,7 +199,10 @@
     setTimeout(() => ui.voiceNote.classList.add('hidden'), 5000);
   }
 
-  function updateCount() { ui.countNum.textContent = String(WordList.count(S.lang)); }
+  function updateCount() {
+    // Show progress toward hearing everything in the room, e.g. "8/12".
+    ui.countNum.textContent = `${WordList.count(S.lang)}/${Vocab.OBJECTS.length}`;
+  }
 
   function setLang(code) {
     if (!Vocab.LANGS.some((l) => l.code === code)) return;
