@@ -241,7 +241,7 @@
     if (S.voiceNoted.has(S.lang)) return;
     S.voiceNoted.add(S.lang);
     const info = Vocab.lang(S.lang);
-    ui.voiceNote.textContent = `No ${info.label} voice is installed on this device — you'll still see each word written out.`;
+    ui.voiceNote.textContent = `No ${info.label} voice is installed on this device — add one in your OS speech settings to hear it. You'll still see each word written out.`;
     ui.voiceNote.classList.remove('hidden');
     setTimeout(() => ui.voiceNote.classList.add('hidden'), 5000);
   }

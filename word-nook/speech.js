@@ -60,6 +60,13 @@ window.Speech = (() => {
   function speak(text, bcp47) {
     if (!supported || !text) return false;
     const voice = voiceFor(bcp47);
+    // If the platform enumerates voices but none match the target language,
+    // don't speak: the engine would fall back to the default (wrong-language)
+    // voice — e.g. a US voice reading Turkish with English phonetics. Staying
+    // silent and letting the game show the written word + note is honest.
+    // When the voice list is empty we can't tell what's available, so we still
+    // try (some mobile engines synthesize from `lang` without listing voices).
+    if (!voice && voices.length) return false;
     try {
       window.speechSynthesis.cancel(); // avoid overlap when tapping rapidly
       const u = new SpeechSynthesisUtterance(text);
