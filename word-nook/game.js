@@ -223,7 +223,7 @@
     ensureAudio();
     const info = Vocab.lang(S.lang);
     const word = Vocab.word(o.id, S.lang);
-    const usedVoice = Speech.speak(word, info.bcp47);
+    const usedVoice = Speech.pronounce(o.id, S.lang, word, info.bcp47);
     WordList.add(S.lang, { id: o.id, word, gloss: Vocab.gloss(o.id), romaji: Vocab.romaji(o.id) });
     S.lastReplay = { word, bcp47: info.bcp47 };
     S.bubble = {
@@ -790,7 +790,7 @@
       row.className = 'word-row';
       const play = document.createElement('button');
       play.className = 'wr-play'; play.textContent = '▶'; play.title = 'hear it again';
-      play.addEventListener('click', () => Speech.speak(e.word, info.bcp47));
+      play.addEventListener('click', () => Speech.pronounce(e.id, S.lang, e.word, info.bcp47));
       const main = document.createElement('div');
       main.className = 'wr-main';
       const rom = (S.lang === 'ja' && e.romaji) ? `<span class="wr-romaji">${e.romaji}</span>` : '';
