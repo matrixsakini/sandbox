@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Word Nook — audio review</title>
+<style>
+  :root {
+    --bg: #f6e7d2; --card: #fffaf2; --ink: #4a3728;
+    --muted: #a08d78; --accent: #d98b5f; --accent-ink: #fff; --line: #ecdcc6;
+    --play: #3f8f86;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: var(--ink); background: radial-gradient(120% 120% at 50% 0%, #fbeedd, #f0dcc2);
+    padding: 28px 18px 60px;
+  }
+  header { max-width: 880px; margin: 0 auto 22px; }
+  h1 { margin: 0 0 4px; font-size: 26px; }
+  .sub { color: var(--muted); font-size: 14px; }
+  .settings {
+    margin-top: 12px; background: var(--card); border: 1px solid var(--line);
+    border-radius: 12px; padding: 12px 14px; font-size: 13.5px; color: var(--ink);
+  }
+  .settings code { background: #f0e4d2; padding: 1px 6px; border-radius: 5px; }
+  main { max-width: 880px; margin: 0 auto; }
+  .lang { margin: 26px 0 8px; display: flex; align-items: center; gap: 10px; }
+  .lang h2 { margin: 0; font-size: 18px; }
+  .flag { font-size: 22px; }
+  .playall {
+    margin-left: auto; border: 1px solid var(--line); background: var(--card);
+    color: var(--ink); border-radius: 999px; padding: 6px 14px; font-size: 13px;
+    cursor: pointer;
+  }
+  .playall:hover { background: #fff; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
+  .row {
+    display: flex; align-items: center; gap: 12px; background: var(--card);
+    border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px;
+    transition: transform .08s ease, box-shadow .12s ease, border-color .12s ease;
+  }
+  .row.playing { border-color: var(--accent); box-shadow: 0 4px 14px rgba(217,139,95,.28); transform: translateY(-1px); }
+  .play {
+    flex: 0 0 auto; width: 40px; height: 40px; border-radius: 50%; border: none;
+    background: var(--play); color: #fff; font-size: 16px; cursor: pointer;
+    display: grid; place-items: center;
+  }
+  .play:hover { filter: brightness(1.06); }
+  .meta { min-width: 0; }
+  .word { font-size: 18px; font-weight: 650; line-height: 1.15; }
+  .romaji { color: var(--play); font-size: 13px; }
+  .gloss { color: var(--muted); font-size: 13px; }
+  .missing { opacity: .5; }
+  footer { max-width: 880px; margin: 30px auto 0; color: var(--muted); font-size: 13px; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#2a2018; --card:#3a2d22; --ink:#f3e7d8; --muted:#b39d86; --line:#4a3a2c; }
+    body { background: radial-gradient(120% 120% at 50% 0%, #35281d, #241b13); }
+    .settings code { background: #4a3a2c; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>🛋️ Word Nook — audio review</h1>
+  <div class="sub">Click ▶ to hear each clip. This page reads the shipped files in <code>../audio/</code>.</div>
+  <div class="settings" id="settings">Loading current settings…</div>
+</header>
+<main id="main">Loading…</main>
+<footer>
+  To change the voice: edit the <code>VOICES</code> / <code>CUTE_SEMITONES</code> / <code>RATE</code>
+  block at the top of <code>tools/generate_audio.py</code>, run
+  <code>python3 tools/generate_audio.py</code>, then refresh this page.
+</footer>
+
+<!-- Vocab is the single source of truth for words / glosses / romaji. -->
+<script src="../vocab.js"></script>
+<script>
+(async () => {
+  const main = document.getElementById('main');
+  let manifest = {};
+  try {
+    manifest = await fetch('../audio/manifest.json').then((r) => r.json());
+  } catch (e) {
+    main.textContent = 'Could not load ../audio/manifest.json — run tools/generate_audio.py first, and serve this folder over http (not file://).';
+    return;
+  }
+
+  document.getElementById('settings').innerHTML =
+    'Current clips: <b>female voice, pitch +3 semitones ("cute")</b>. ' +
+    Object.values(manifest).reduce((n, a) => n + a.length, 0) + ' clips across ' +
+    Object.keys(manifest).length + ' languages.';
+
+  let current = null; // {audio, row}
+  function stop() {
+    if (current) { current.audio.pause(); current.audio.currentTime = 0; current.row.classList.remove('playing'); current = null; }
+  }
+  function play(code, id, row) {
+    stop();
+    const audio = new Audio(`../audio/${code}/${id}.mp3`);
+    row.classList.add('playing');
+    current = { audio, row };
+    audio.onended = () => row.classList.remove('playing');
+    audio.play().catch(() => row.classList.remove('playing'));
+    return audio;
+  }
+
+  main.innerHTML = '';
+  for (const lang of Vocab.LANGS) {
+    const code = lang.code;
+    const ids = manifest[code] || [];
+    const head = document.createElement('div');
+    head.className = 'lang';
+    head.innerHTML = `<span class="flag">${lang.flag}</span><h2>${lang.label}</h2>`;
+    const playAll = document.createElement('button');
+    playAll.className = 'playall';
+    playAll.textContent = '▶ Play all';
+    head.appendChild(playAll);
+    main.appendChild(head);
+
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+    const rows = [];
+    for (const o of Vocab.INTERACTIVE) {
+      const id = o.id;
+      const has = ids.includes(id);
+      const row = document.createElement('div');
+      row.className = 'row' + (has ? '' : ' missing');
+      const word = Vocab.word(id, code);
+      const romaji = (code === 'ja' && Vocab.romaji(id)) ? `<span class="romaji">${Vocab.romaji(id)}</span> · ` : '';
+      row.innerHTML =
+        `<button class="play" ${has ? '' : 'disabled'} title="play">▶</button>` +
+        `<div class="meta"><div class="word">${word}</div>` +
+        `<div class="gloss">${romaji}${Vocab.gloss(id)}${has ? '' : ' — no clip'}</div></div>`;
+      if (has) row.querySelector('.play').addEventListener('click', () => play(code, id, row));
+      grid.appendChild(row);
+      rows.push({ id, has, row });
+    }
+    main.appendChild(grid);
+
+    playAll.addEventListener('click', () => {
+      const queue = rows.filter((r) => r.has);
+      let i = 0;
+      const next = () => {
+        if (i >= queue.length) return;
+        const { id, row } = queue[i++];
+        const a = play(code, id, row);
+        a.onended = () => { row.classList.remove('playing'); setTimeout(next, 180); };
+      };
+      next();
+    });
+  }
+})();
+</script>
+</body>
+</html>

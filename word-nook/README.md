@@ -57,9 +57,31 @@ Words play as small **pre-recorded clips** (`audio/{lang}/{id}.mp3`), so each on
 sounds correct and identical on every device — no OS voice to install, no network
 needed. The clips are generated offline from the word list by
 [`tools/generate_audio.py`](tools/generate_audio.py) using eSpeak NG + MBROLA
-voices; regenerate them whenever the vocabulary changes. The browser **Web Speech
-API** stays as a fallback for any word without a clip (and if no matching system
-voice exists there either, the word is still shown written out with romaji).
+voices (currently a female voice, pitched up a few semitones for a cuter tone).
+The browser **Web Speech API** stays as a fallback for any word without a clip
+(and if no matching system voice exists there either, the word is still shown
+written out with romaji).
+
+### Reviewing / regenerating the audio
+
+```bash
+cd word-nook
+python3 -m http.server 8000        # then open http://localhost:8000/tools/review.html to listen
+```
+
+To change the voice, edit the **TUNING block** at the top of
+[`tools/generate_audio.py`](tools/generate_audio.py) — `VOICES` (per language),
+`RATE` (pace), `CUTE_SEMITONES` (pitch-up) — then regenerate and refresh the
+review page:
+
+```bash
+# needs: apt-get install -y espeak-ng mbrola ffmpeg mbrola-tr2 mbrola-nl3 mbrola-us1
+python3 tools/generate_audio.py
+```
+
+For a truly natural/cute voice, point `synth()` at a neural TTS (e.g. a cloud
+provider) and keep the same output paths — the game picks the new clips up
+unchanged.
 
 ## Run locally
 

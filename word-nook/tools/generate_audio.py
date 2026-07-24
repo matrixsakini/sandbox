@@ -32,16 +32,25 @@ ROOT = os.path.dirname(HERE)                 # word-nook/
 AUDIO = os.path.join(ROOT, "audio")
 VOCAB = os.path.join(ROOT, "vocab.js")
 
-# eSpeak NG voice per language. MBROLA (mb-*) where it helps; native "ja".
-VOICES = {"en": "mb-us1", "tr": "mb-tr1", "nl": "mb-nl2", "ja": "ja"}
+# ---------------------------------------------------------------------------
+# TUNING — edit these, re-run, then review with tools/review.html.
+# ---------------------------------------------------------------------------
+# eSpeak NG voice per language. These are the FEMALE voices (mb-tr2 / mb-nl3 /
+# mb-us1 are female; "ja+f3" is eSpeak NG's native Japanese female variant —
+# MBROLA-jp is avoided because it has missing diphones and mis-reads kanji).
+VOICES = {"en": "mb-us1", "tr": "mb-tr2", "nl": "mb-nl3", "ja": "ja+f3"}
 
 # Some words hit phonemes an MBROLA voice lacks a diphone for (e.g. Turkish
 # "pencere"), which MBROLA renders as silence gaps. When that happens we re-render
-# the word with eSpeak NG's native voice — more robotic, but complete and clear.
-FALLBACK = {"en": "en-us", "tr": "tr", "nl": "nl", "ja": "ja"}
+# the word with eSpeak NG's native (female) voice — more robotic, but complete.
+FALLBACK = {"en": "en-us+f3", "tr": "tr+f3", "nl": "nl+f3", "ja": "ja+f3"}
 
 # Learner-friendly pace (words per minute); mirrors the old Web Speech rate 0.9.
-RATE = 140
+RATE = 145
+
+# "Cute" tweak: shift every clip up by this many semitones (pitch up, duration
+# preserved) for a lighter, younger voice. 0 = off, ~2–4 = cute, higher = chipmunk.
+CUTE_SEMITONES = 3.0
 
 # Japanese: vocab.js stores the display word (often kanji), which eSpeak mis-reads.
 # Synthesize from an explicit kana reading instead, keyed by object id.
@@ -84,14 +93,26 @@ def synth(text, voice, wav_path):
 
 
 def encode(wav_path, mp3_path):
-    """Trim leading/trailing silence, normalize loudness, encode small mono MP3."""
-    af = (
-        "silenceremove=start_periods=1:start_silence=0.03:start_threshold=-45dB,"
-        "areverse,"
-        "silenceremove=start_periods=1:start_silence=0.03:start_threshold=-45dB,"
-        "areverse,"
-        "loudnorm=I=-16:TP=-1.5:LRA=11"
-    )
+    """Pitch-shift (cute), trim silence, normalize loudness, encode small mono MP3."""
+    sr = 22050
+    filters = []
+    if CUTE_SEMITONES:
+        # Pitch up without slowing down: raise the sample rate (pitch+speed up),
+        # then atempo back to the original duration, then resample to `sr`.
+        ratio = 2.0 ** (CUTE_SEMITONES / 12.0)
+        filters += [
+            "asetrate=%d" % int(sr * ratio),
+            "atempo=%.6f" % (1.0 / ratio),
+            "aresample=%d" % sr,
+        ]
+    filters += [
+        "silenceremove=start_periods=1:start_silence=0.03:start_threshold=-45dB",
+        "areverse",
+        "silenceremove=start_periods=1:start_silence=0.03:start_threshold=-45dB",
+        "areverse",
+        "loudnorm=I=-16:TP=-1.5:LRA=11",
+    ]
+    af = ",".join(filters)
     subprocess.run(
         ["ffmpeg", "-y", "-hide_banner", "-loglevel", "error",
          "-i", wav_path, "-af", af,
