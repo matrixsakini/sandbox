@@ -53,11 +53,13 @@ step.
 
 ## Pronunciation
 
-Words are spoken with the browser's built-in **Web Speech API** — no audio files,
-no dependencies. Voice availability depends on your device/OS: if, say, a
-Japanese or Turkish voice isn't installed, the word is still shown written out
-(with romaji) and a one-time note lets you know. Desktop Chrome and Safari have
-the widest voice coverage.
+Words play as small **pre-recorded clips** (`audio/{lang}/{id}.mp3`), so each one
+sounds correct and identical on every device — no OS voice to install, no network
+needed. The clips are generated offline from the word list by
+[`tools/generate_audio.py`](tools/generate_audio.py) using eSpeak NG + MBROLA
+voices; regenerate them whenever the vocabulary changes. The browser **Web Speech
+API** stays as a fallback for any word without a clip (and if no matching system
+voice exists there either, the word is still shown written out with romaji).
 
 ## Run locally
 
