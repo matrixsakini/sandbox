@@ -6,6 +6,9 @@ they fall. Every unbroken combo restores light to the kingdom; every shadow
 that slips past dims it again. Fill the light bar and finish the run as
 **Neo Queen Serenity**.
 
+<img width="598" height="687" alt="image" src="https://github.com/user-attachments/assets/8d605595-ac89-4a73-a0ac-06b1eba29bac" />
+
+
 Pure HTML5 canvas + vanilla JS. No build step, no dependencies, no backend.
 
 ## Languages
