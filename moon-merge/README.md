@@ -12,6 +12,7 @@ corner one so it has nowhere left to move and it seals itself into a
 is telegraphed in the upcoming-piece queue, so a planned board survives them;
 a careless one drowns in darkness.
 
+<img width="599" height="690" alt="image" src="https://github.com/user-attachments/assets/6eeb9af1-7afa-491c-816c-920857a62b67" />
 Pure HTML5 canvas + vanilla JS. No build step, no dependencies, no backend.
 
 ## Languages
